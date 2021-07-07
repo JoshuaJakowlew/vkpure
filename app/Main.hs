@@ -53,12 +53,7 @@ posts = client (Proxy @API)
 
 
 query = posts 0 Nothing 3 "TOKEN" "5.131"
-{-
-type KickChatMember = "kickChatMember"
-  :> RequiredQueryParam "chat_id" ChatId
-  :> RequiredQueryParam "user_id" UserId
-  :> Get '[JSON] (Response Bool)
--}
+
 run :: IO ()
 run = do
   manager' <- newManager tlsManagerSettings
