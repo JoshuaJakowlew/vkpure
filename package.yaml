@@ -10,6 +10,16 @@ extra-source-files:
 - README.md
 - ChangeLog.md
 
+default-extensions:
+- BlockArguments
+- DataKinds
+- DeriveGeneric
+- OverloadedStrings
+- OverloadedLabels
+- TypeApplications
+- DuplicateRecordFields
+- NoImplicitPrelude
+
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
 # category:            Web
@@ -26,6 +36,7 @@ dependencies:
 - array
 - bytestring
 - lens
+- generic-lens
 - pretty-show
 - servant
 - servant-client

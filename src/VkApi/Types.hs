@@ -1,56 +1,64 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeApplications #-}
 
 module VkApi.Types where
 
 import Data.Aeson
 import Data.Array
 import Data.Aeson.TH
-import GHC.Generics (Generic)
 import Language.Haskell.TH
 import Data.Text
 import VkApi.Internal.Utils
 
+import VkPure.Prelude
+import GHC.Generics
 
 data User = User 
-  { userId              :: Int
-  , userFirstName       :: Text
-  , userDeactivated     :: Text
-  , userIsClosed        :: Bool
-  , userLastName        :: Text
-  , userCanAccessClosed :: Bool
+  { id              :: Int
+  , firstName       :: Text
+  , deactivated     :: Text
+  , isClosed        :: Bool
+  , lastName        :: Text
+  , canAccessClosed :: Bool
   } deriving (Generic, Show)
 
 data Message = Message
-  { messageId                    :: Int
-  , messageDate                  :: Int
-  , messagePeerId                :: Int
-  , messageFromId                :: Int
-  , messageText                  :: Text
-  , messageRandomId              :: Int
-  , messageRef                   :: Text
-  , messageRefSource             :: Text
+  { id                    :: Int
+  , date                  :: Int
+  , peer_id               :: Int
+  , fromId                :: Int
+  , text                  :: Text
+  , randomId              :: Int
+  , ref                   :: Text
+  , refSource             :: Text
 --  , messageAttachments           :: Array
-  , messageImportant             :: Bool
+  , important             :: Bool
 --  , messageGeo                   :: Object
-  , messagePyaload               :: Text
+  , pyaload               :: Text
 --  , messageKeyboard              :: Object
 --  , messageFwdMessages           :: Array
 --  , messageReplyMessage          :: Object
 --  , messageAction                :: Object
-  , messageAdminAutorId          :: Int
-  , messageConversationMessageId :: Int
-  , messageIsCropped             :: Bool
-  , messageMembersCount          :: Int
-  , messageUpdateTime            :: Int
-  , messageWasListened           :: Bool
-  , messagePinnedAt              :: Int
-  , messageMessageTag            :: Text
+  , adminAutorId          :: Int
+  , conversationMessageId :: Int
+  , isCropped             :: Bool
+  , membersCount          :: Int
+  , updateTime            :: Int
+  , wasListened           :: Bool
+  , pinnedAt              :: Int
+  , messageTag            :: Text
   } deriving (Generic, Show)
+
+
+defaultUser = User 
+  { id              = 0
+  , firstName       = "Pasha"
+  , deactivated     = ""
+  , isClosed        = False
+  , lastName        = "Dura"
+  , canAccessClosed = True
+  } 
+
+foo = defaultUser ^. #firstName
 
 foldMap deriveJSON' 
   [ ''User

@@ -7,27 +7,23 @@ import Data.Aeson.Types
 import Data.Aeson
 import Data.Char
 import Data.List
-
+import VkPure.Prelude 
 deriveJSON' :: Name -> Q [Dec]
-deriveJSON' name = deriveJSON (jsonOptions (nameBase name)) name
+deriveJSON' name = deriveJSON (jsonOptions) name
 
 
-jsonOptions :: String -> Options
-jsonOptions tname = defaultOptions
-  { fieldLabelModifier     = snakeFieldModifier tname
-  , constructorTagModifier = snakeFieldModifier tname
+jsonOptions ::  Options
+jsonOptions  = defaultOptions
+  { fieldLabelModifier     = snakeFieldModifier 
+  , constructorTagModifier = snakeFieldModifier 
   , omitNothingFields      = True
   }
-  
-snakeFieldModifier :: String -> String -> String
-snakeFieldModifier xs ys = wordsToSnake (stripCommonPrefixWords xs ys)
+
+snakeFieldModifier ::  String -> String
+snakeFieldModifier ys = wordsToSnake (camelWords (capitalise ys))
 
 wordsToSnake :: [String] -> String
 wordsToSnake = intercalate "_" . map (map toLower)
-
-stripCommonPrefixWords :: String -> String -> [String]
-stripCommonPrefixWords xs ys =
-  stripCommonPrefix (camelWords xs) (camelWords (capitalise ys))
 
 camelWords :: String -> [String]
 camelWords "" = []
@@ -43,6 +39,3 @@ capitalise :: String -> String
 capitalise (c:s) = toUpper c : s
 capitalise "" = ""
 
-stripCommonPrefix :: Eq a => [a] -> [a] -> [a]
-stripCommonPrefix (x:xs) (y:ys) | x == y = stripCommonPrefix xs ys
-stripCommonPrefix _ ys = ys

@@ -16,6 +16,7 @@ import Servant.Client
 import Servant.Types.SourceT (foreach)
 import Data.Text
 import Network.HTTP.Client.TLS
+import VkPure.Prelude 
 
 import qualified Servant.Client.Streaming as S
 
@@ -23,31 +24,41 @@ import qualified Servant.Client.Streaming as S
 type RequiredQueryParam = QueryParam' '[Required, Strict]
 
 data VkResponse a = VkResponse
-  { vkResponseResponse :: a
+  { response :: a
   } deriving (Show, Generic)
 
 deriveJSON' ''VkResponse
 
 data Server = Server
-  { serverKey    :: Text
-  , serverServer :: Text
-  , serverTs     :: Int
+  { key    :: Text
+  , server :: Text
+  , ts     :: Int
   } deriving (Show, Generic)
 
 deriveJSON' ''Server
 
 type API = "messages.getLongPollServer"
-  :> RequiredQueryParam "need_pts" Int
-  :> QueryParam "group_id" Int
-  :> RequiredQueryParam "lp_version" Int
-  :> RequiredQueryParam "access_token" Text
-  :> RequiredQueryParam "v" Text
-  -- :> Get Text
-  :> Get '[JSON] (VkResponse Server)
+  :> RequiredQueryParam "need_pts"     Int
+  :> RequiredQueryParam "lp_version"   Int
+  :> QueryParam         "group_id"     Int
+  :>> Get '[JSON] (VkResponse Server)
 
+type a :>> b = a
+    :> RequiredQueryParam "access_token" Token
+    :> RequiredQueryParam "v"            Version
+    :> b
 
+newtype Token      = Token Text
+  deriving (Show, Generic, ToJSON, FromJSON)
 
-posts :: Int -> Maybe Int -> Int -> Text -> Text -> ClientM (VkResponse Server)
+newtype ApiVersion = ApiVersion Text
+  deriving (Show, Generic, ToJSON, FromJSON)
+
+type VkClient a = Token -> ApiVersion -> ClientM a
+
+-- 2uZGYz7zQZjZyS3x516p
+
+posts :: Int -> Int -> Maybe Int -> VkClient (VkResponse Server)
 posts = client (Proxy @API)
 
 
