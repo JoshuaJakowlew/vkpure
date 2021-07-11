@@ -11,16 +11,45 @@ extra-source-files:
 - ChangeLog.md
 
 default-extensions:
+- OverloadedLabels
+- AllowAmbiguousTypes
+- ApplicativeDo
 - BlockArguments
+- ConstraintKinds
 - DataKinds
 - DeriveGeneric
-- OverloadedStrings
-- OverloadedLabels
-- TypeApplications
+- DeriveFoldable
+- DeriveFunctor
+- DeriveTraversable
+- DerivingStrategies
+- DerivingVia
 - DuplicateRecordFields
-- NoImplicitPrelude
+- EmptyCase
+- FlexibleContexts
+- FlexibleInstances
+- FunctionalDependencies
+- GADTs
+- GeneralizedNewtypeDeriving
+- ImportQualifiedPost
+- KindSignatures
+- LambdaCase
+- MultiParamTypeClasses
+- MultiWayIf
+- NamedFieldPuns
+- OverloadedStrings
+- PatternSynonyms
+- RankNTypes
+- ScopedTypeVariables
+- StandaloneDeriving
+- TemplateHaskell
+- TypeApplications
+- TypeFamilies
+- TypeOperators
+- TypeSynonymInstances
+- UndecidableInstances
+- ViewPatterns
+- QuasiQuotes
 
-# Metadata used when publishing your package
 # synopsis:            Short description of your package
 # category:            Web
 
@@ -37,7 +66,6 @@ dependencies:
 - bytestring
 - lens
 - generic-lens
-- pretty-show
 - servant
 - servant-client
 - servant-multipart

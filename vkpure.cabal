@@ -25,7 +25,10 @@ source-repository head
 
 library
   exposed-modules:
+      VkApi.Auth
+      VkApi.Core
       VkApi.Internal.Utils
+      VkApi.Messages
       VkApi.Types
       VkPure.Prelude
   other-modules:
@@ -33,14 +36,44 @@ library
   hs-source-dirs:
       src
   default-extensions:
+      OverloadedLabels
+      AllowAmbiguousTypes
+      ApplicativeDo
       BlockArguments
+      ConstraintKinds
       DataKinds
       DeriveGeneric
-      OverloadedStrings
-      OverloadedLabels
-      TypeApplications
+      DeriveFoldable
+      DeriveFunctor
+      DeriveTraversable
+      DerivingStrategies
+      DerivingVia
       DuplicateRecordFields
-      NoImplicitPrelude
+      EmptyCase
+      FlexibleContexts
+      FlexibleInstances
+      FunctionalDependencies
+      GADTs
+      GeneralizedNewtypeDeriving
+      ImportQualifiedPost
+      KindSignatures
+      LambdaCase
+      MultiParamTypeClasses
+      MultiWayIf
+      NamedFieldPuns
+      OverloadedStrings
+      PatternSynonyms
+      RankNTypes
+      ScopedTypeVariables
+      StandaloneDeriving
+      TemplateHaskell
+      TypeApplications
+      TypeFamilies
+      TypeOperators
+      TypeSynonymInstances
+      UndecidableInstances
+      ViewPatterns
+      QuasiQuotes
   build-depends:
       aeson
     , aeson-pretty
@@ -51,7 +84,6 @@ library
     , http-client
     , http-client-tls
     , lens
-    , pretty-show
     , servant
     , servant-client
     , servant-multipart
@@ -68,14 +100,44 @@ executable vkpure-exe
   hs-source-dirs:
       app
   default-extensions:
+      OverloadedLabels
+      AllowAmbiguousTypes
+      ApplicativeDo
       BlockArguments
+      ConstraintKinds
       DataKinds
       DeriveGeneric
-      OverloadedStrings
-      OverloadedLabels
-      TypeApplications
+      DeriveFoldable
+      DeriveFunctor
+      DeriveTraversable
+      DerivingStrategies
+      DerivingVia
       DuplicateRecordFields
-      NoImplicitPrelude
+      EmptyCase
+      FlexibleContexts
+      FlexibleInstances
+      FunctionalDependencies
+      GADTs
+      GeneralizedNewtypeDeriving
+      ImportQualifiedPost
+      KindSignatures
+      LambdaCase
+      MultiParamTypeClasses
+      MultiWayIf
+      NamedFieldPuns
+      OverloadedStrings
+      PatternSynonyms
+      RankNTypes
+      ScopedTypeVariables
+      StandaloneDeriving
+      TemplateHaskell
+      TypeApplications
+      TypeFamilies
+      TypeOperators
+      TypeSynonymInstances
+      UndecidableInstances
+      ViewPatterns
+      QuasiQuotes
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
@@ -87,7 +149,6 @@ executable vkpure-exe
     , http-client
     , http-client-tls
     , lens
-    , pretty-show
     , servant
     , servant-client
     , servant-multipart
@@ -106,14 +167,44 @@ test-suite vkpure-test
   hs-source-dirs:
       test
   default-extensions:
+      OverloadedLabels
+      AllowAmbiguousTypes
+      ApplicativeDo
       BlockArguments
+      ConstraintKinds
       DataKinds
       DeriveGeneric
-      OverloadedStrings
-      OverloadedLabels
-      TypeApplications
+      DeriveFoldable
+      DeriveFunctor
+      DeriveTraversable
+      DerivingStrategies
+      DerivingVia
       DuplicateRecordFields
-      NoImplicitPrelude
+      EmptyCase
+      FlexibleContexts
+      FlexibleInstances
+      FunctionalDependencies
+      GADTs
+      GeneralizedNewtypeDeriving
+      ImportQualifiedPost
+      KindSignatures
+      LambdaCase
+      MultiParamTypeClasses
+      MultiWayIf
+      NamedFieldPuns
+      OverloadedStrings
+      PatternSynonyms
+      RankNTypes
+      ScopedTypeVariables
+      StandaloneDeriving
+      TemplateHaskell
+      TypeApplications
+      TypeFamilies
+      TypeOperators
+      TypeSynonymInstances
+      UndecidableInstances
+      ViewPatterns
+      QuasiQuotes
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
@@ -125,7 +216,6 @@ test-suite vkpure-test
     , http-client
     , http-client-tls
     , lens
-    , pretty-show
     , servant
     , servant-client
     , servant-multipart

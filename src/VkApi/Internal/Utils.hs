@@ -8,6 +8,7 @@ import Data.Aeson
 import Data.Char
 import Data.List
 import VkPure.Prelude 
+
 deriveJSON' :: Name -> Q [Dec]
 deriveJSON' name = deriveJSON (jsonOptions) name
 
