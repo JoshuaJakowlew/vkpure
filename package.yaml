@@ -45,10 +45,10 @@ default-extensions:
 - TypeApplications
 - TypeFamilies
 - TypeOperators
-- TypeSynonymInstances
 - UndecidableInstances
 - ViewPatterns
 - QuasiQuotes
+- NoImplicitPrelude
 
 # synopsis:            Short description of your package
 # category:            Web
@@ -68,6 +68,7 @@ dependencies:
 - generic-lens
 - servant
 - servant-client
+- servant-client-core
 - servant-multipart
 - servant-multipart-client
 - servant-multipart-api

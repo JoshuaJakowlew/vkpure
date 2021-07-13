@@ -30,6 +30,7 @@ library
       VkApi.Internal.Utils
       VkApi.Messages
       VkApi.Types
+      VkBot.Utils
       VkPure.Prelude
   other-modules:
       Paths_vkpure
@@ -70,10 +71,10 @@ library
       TypeApplications
       TypeFamilies
       TypeOperators
-      TypeSynonymInstances
       UndecidableInstances
       ViewPatterns
       QuasiQuotes
+      NoImplicitPrelude
   build-depends:
       aeson
     , aeson-pretty
@@ -86,6 +87,7 @@ library
     , lens
     , servant
     , servant-client
+    , servant-client-core
     , servant-multipart
     , servant-multipart-api
     , servant-multipart-client
@@ -134,10 +136,10 @@ executable vkpure-exe
       TypeApplications
       TypeFamilies
       TypeOperators
-      TypeSynonymInstances
       UndecidableInstances
       ViewPatterns
       QuasiQuotes
+      NoImplicitPrelude
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
@@ -151,6 +153,7 @@ executable vkpure-exe
     , lens
     , servant
     , servant-client
+    , servant-client-core
     , servant-multipart
     , servant-multipart-api
     , servant-multipart-client
@@ -201,10 +204,10 @@ test-suite vkpure-test
       TypeApplications
       TypeFamilies
       TypeOperators
-      TypeSynonymInstances
       UndecidableInstances
       ViewPatterns
       QuasiQuotes
+      NoImplicitPrelude
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
@@ -218,6 +221,7 @@ test-suite vkpure-test
     , lens
     , servant
     , servant-client
+    , servant-client-core
     , servant-multipart
     , servant-multipart-api
     , servant-multipart-client

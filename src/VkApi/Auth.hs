@@ -29,11 +29,11 @@ data LogPassAuthResponse = LogPassAuthResponse
 deriveJSON' ''LogPassAuthResponse
 
 type VkAuthApi = "token"
-  :> RequiredQueryParam "username" Text
-  :> RequiredQueryParam "password" Text
-  :> RequiredQueryParam "grant_type" Text
-  :> RequiredQueryParam "scope" Text
-  :> RequiredQueryParam "client_id" Int
+  :> RequiredQueryParam "username"      Text
+  :> RequiredQueryParam "password"      Text
+  :> RequiredQueryParam "grant_type"    Text
+  :> RequiredQueryParam "scope"         Text
+  :> RequiredQueryParam "client_id"     Int
   :> RequiredQueryParam "client_secret" Text
   :> RequiredQueryParam "2fa_supported" Int
   :> Get '[JSON] LogPassAuthResponse
@@ -43,12 +43,3 @@ getLogPassAuth = client (Proxy @VkAuthApi)
 
 logPassAuth :: UserCredentials -> ClientM LogPassAuthResponse
 logPassAuth c = getLogPassAuth (c ^. #login) (c ^. #password) "password" "all" 2274003 "hHbZxrka2uZ6jB1inYsH" 1
-
-runLogPassAuth :: UserCredentials -> IO ()
-runLogPassAuth c = do
-  manager' <- newManager tlsManagerSettings
-  res <- runClientM (logPassAuth c) (mkClientEnv manager' (BaseUrl Https "oauth.vk.com" 443 ""))
-  case res of
-    Left err -> putStrLn $ "Error: " ++ show err
-    Right message -> do
-      print message

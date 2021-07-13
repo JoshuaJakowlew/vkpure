@@ -9,6 +9,7 @@ import Servant.Client
 
 import VkApi.Core
 import VkApi.Internal.Utils
+import VkPure.Prelude
 
 data VkResponse a = VkResponse
   { response :: a
@@ -28,7 +29,6 @@ type VkMessagesApi = "messages.getLongPollServer"
   :> RequiredQueryParam "need_pts"   Int
   :> RequiredQueryParam "lp_version" Int
   :> QueryParam         "group_id"   Int
-  :>> Get '[JSON] (VkResponse Server)
+  :> Get '[JSON] (VkResponse Server)
 
-getLongPollServer :: Int -> Int -> Maybe Int -> VkClient (VkResponse Server)
-getLongPollServer = client (Proxy @VkMessagesApi)
+

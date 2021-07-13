@@ -6,12 +6,11 @@ import GHC.Generics
 import Servant.API
 import Servant.Client
 
+import VkPure.Prelude
+
 type RequiredQueryParam = QueryParam' '[Required, Strict]
 
-type a :>> b = a
-    :> RequiredQueryParam "access_token" Token
-    :> RequiredQueryParam "v"            ApiVersion
-    :> b
+
 
 newtype Token      = Token Text
   deriving (Show, Generic, ToJSON, FromJSON, ToHttpApiData)
