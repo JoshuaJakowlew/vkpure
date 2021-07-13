@@ -1,3 +1,5 @@
+
+
 module Main where
   
 import Data.Aeson
@@ -39,25 +41,28 @@ data Methods routes
     { longPollServer :: routes :- VkMessagesApi
     } deriving (Generic)
 
-data Api routes 
-  = Api
-    { api :: routes :- Test (ToServantApi Methods)
-    } deriving (Generic)
+type Api =  RequiredQueryParam "access_token" Token
+  :> RequiredQueryParam "v" ApiVersion :> ToServantApi Methods
 
 
-foo = genericClient @Api @ClientM
+
+
+api = client (Proxy @Api)
+
 
 unwrap (Right shit) = shit
+
 
 main :: IO ()
 main = do
   auth <- unwrap <$> (runLogPassAuth user)
   let token = auth  ^. #accessToken
 
-  let lp = (foo ^. #api) (Token token) (ApiVersion "5.131")
-                                                -- кидает ошибку
-  res <- runQuery "api.vk.com" "method" $ ( lp {- ^. #longPollServer -} ) 0 3 Nothing 
-
+  let lp = api (Token token) (ApiVersion "5.131")
+  let lp' = fromServant @Methods @(AsClientT _) lp
+  
+  
+  res <- runQuery "api.vk.com" "method" $ ( lp'.longPollServer  ) 0 3 Nothing 
   
   case res of
     Left err -> putStrLn $ "Error: " ++ show err
