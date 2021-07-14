@@ -24,7 +24,6 @@ import VkApi.Core
 
 import VkBot.Utils
 
-
 -- (Text, Text) -> IO Token
 
 
@@ -41,13 +40,7 @@ data Methods routes
     { longPollServer :: routes :- VkMessagesApi
     } deriving (Generic)
 
-type Api =  RequiredQueryParam "access_token" Token
-  :> RequiredQueryParam "v" ApiVersion :> ToServantApi Methods
 
-
-
-
-api = client (Proxy @Api)
 
 
 unwrap (Right shit) = shit

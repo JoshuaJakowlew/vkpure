@@ -25,10 +25,12 @@ source-repository head
 
 library
   exposed-modules:
+      VkApi
       VkApi.Auth
       VkApi.Core
       VkApi.Internal.Utils
       VkApi.Messages
+      VkApi.Methods
       VkApi.Types
       VkBot.Utils
       VkPure.Prelude
