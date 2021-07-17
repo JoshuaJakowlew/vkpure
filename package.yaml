@@ -23,7 +23,7 @@ default-extensions:
 - DeriveTraversable
 - DerivingStrategies
 - DerivingVia
-- DuplicateRecordFields
+# - DuplicateRecordFields
 - EmptyCase
 - FlexibleContexts
 - FlexibleInstances
@@ -76,7 +76,9 @@ dependencies:
 - text
 - http-client
 - http-client-tls
-- record-hasfield # for record-dot-preprocessor
+- named
+- record-dot-preprocessor # for new record syntax
+- record-hasfield         # for record-dot-preprocessor
 
 library:
   source-dirs: src

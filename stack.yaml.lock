@@ -3,63 +3,77 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-snapshots:
-- original: nightly-2021-07-02
-  completed:
-    sha256: 0e8821927af7615313e384b71d292e845a8f01a596f73b59f3d6295fa1f7dd1d
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2021/7/2.yaml
-    size: 534950
 packages:
-- original:
+- completed:
     hackage: servant-multipart-client-0.12.1@sha256:d043063e2f33eab86840f87c4bdb16eb3fe4a5847a0b118e4f4265cf3ba4c9b3,1892
-  completed:
     pantry-tree:
-      sha256: cb02eea7894a94e5dedf5cb74fd5fc6b989711ebb46a0e14d77f74f3b89dcbe0
       size: 400
+      sha256: cb02eea7894a94e5dedf5cb74fd5fc6b989711ebb46a0e14d77f74f3b89dcbe0
+  original:
     hackage: servant-multipart-client-0.12.1@sha256:d043063e2f33eab86840f87c4bdb16eb3fe4a5847a0b118e4f4265cf3ba4c9b3,1892
-- original:
+- completed:
     hackage: servant-client-0.18.3@sha256:570145df5209b245a141eec6841fbca6785cd88e073e85eecbeff4438ca34784,4602
-  completed:
     pantry-tree:
-      sha256: 4f3a9dd501ea02289559f8c49df88fb00a2f34ac225c2d9ae1df5970bf8ce4db
       size: 1300
+      sha256: 4f3a9dd501ea02289559f8c49df88fb00a2f34ac225c2d9ae1df5970bf8ce4db
+  original:
     hackage: servant-client-0.18.3@sha256:570145df5209b245a141eec6841fbca6785cd88e073e85eecbeff4438ca34784,4602
-- original:
-    subdir: generic-lens-core
-    git: https://github.com/kcsongor/generic-lens.git
-    commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
-  completed:
+- completed:
+    hackage: servant-client-namedargs-0.1.1.1@sha256:5d634477b005893f77d134d37753492430d80e323a59873e9e00f9da636d180f,1809
     pantry-tree:
-      sha256: 5a26b16c38ad8d8ebc81182e1d09858858f16dc117a0c7b084d8446d3a17d749
-      size: 2283
+      size: 366
+      sha256: 256369572fa648da29e778cfb86e3b3fc578c58fffd341d474019c0514cd24d9
+  original:
+    hackage: servant-client-namedargs-0.1.1.1@sha256:5d634477b005893f77d134d37753492430d80e323a59873e9e00f9da636d180f,1809
+- completed:
+    hackage: servant-namedargs-0.1.1.1@sha256:7e7705cd90243e41be10ce1dbdb9ac0aaf52875f97554f7134e4f6e0c6701d7c,1259
+    pantry-tree:
+      size: 349
+      sha256: 79a120788184e294a68977f942a32844a196487b30f0e6ba46a1ba92a3084841
+  original:
+    hackage: servant-namedargs-0.1.1.1@sha256:7e7705cd90243e41be10ce1dbdb9ac0aaf52875f97554f7134e4f6e0c6701d7c,1259
+- completed:
     subdir: generic-lens-core
-    version: 2.1.0.0
-    git: https://github.com/kcsongor/generic-lens.git
     name: generic-lens-core
-    commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
-- original:
-    subdir: generic-lens
-    git: https://github.com/kcsongor/generic-lens.git
-    commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
-  completed:
-    pantry-tree:
-      sha256: aba81557550537d4cfda2c1b07accff8589da44a1e418a3cde5639eb438d1c86
-      size: 2630
-    subdir: generic-lens
     version: 2.1.0.0
     git: https://github.com/kcsongor/generic-lens.git
+    pantry-tree:
+      size: 2283
+      sha256: 5a26b16c38ad8d8ebc81182e1d09858858f16dc117a0c7b084d8446d3a17d749
+    commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
+  original:
+    subdir: generic-lens-core
+    git: https://github.com/kcsongor/generic-lens.git
+    commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
+- completed:
+    subdir: generic-lens
     name: generic-lens
-    commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
-- original:
-    subdir: generic-optics
-    git: https://github.com/kcsongor/generic-lens.git
-    commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
-  completed:
-    pantry-tree:
-      sha256: 9e376afdfc9257f2fd1928262a2f6616401b63b95fd1bfd563e971f18cd85046
-      size: 2333
-    subdir: generic-optics
     version: 2.1.0.0
     git: https://github.com/kcsongor/generic-lens.git
-    name: generic-optics
+    pantry-tree:
+      size: 2630
+      sha256: aba81557550537d4cfda2c1b07accff8589da44a1e418a3cde5639eb438d1c86
     commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
+  original:
+    subdir: generic-lens
+    git: https://github.com/kcsongor/generic-lens.git
+    commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
+- completed:
+    subdir: generic-optics
+    name: generic-optics
+    version: 2.1.0.0
+    git: https://github.com/kcsongor/generic-lens.git
+    pantry-tree:
+      size: 2333
+      sha256: 9e376afdfc9257f2fd1928262a2f6616401b63b95fd1bfd563e971f18cd85046
+    commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
+  original:
+    subdir: generic-optics
+    git: https://github.com/kcsongor/generic-lens.git
+    commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8
+snapshots:
+- completed:
+    size: 534950
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2021/7/2.yaml
+    sha256: 0e8821927af7615313e384b71d292e845a8f01a596f73b59f3d6295fa1f7dd1d
+  original: nightly-2021-07-02

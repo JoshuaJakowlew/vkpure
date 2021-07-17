@@ -1,7 +1,7 @@
+
 module VkApi.Messages where
 
 import Data.Aeson
-import Data.Proxy
 import Data.Text
 import GHC.Generics
 import Servant.API
@@ -9,6 +9,7 @@ import Servant.Client
 
 import VkApi.Core
 import VkApi.Internal.Utils
+import VkApi.Internal.Named
 import VkPure.Prelude
 
 data VkResponse a = VkResponse
@@ -26,9 +27,11 @@ data Server = Server
 deriveJSON' ''Server
 
 type VkMessagesApi = "messages.getLongPollServer"
-  :> RequiredQueryParam "need_pts"   Int
-  :> RequiredQueryParam "lp_version" Int
-  :> QueryParam         "group_id"   Int
+  :> RequiredNamedParam "needPts"   "need_pts"   Int
+  :> RequiredNamedParam "lpVersion" "lp_version" Int
+  :> OptionalNamedParam "groupId"   "group_id"   Int
   :> Get '[JSON] (VkResponse Server)
 
-
+{-RequiredNamedParam-}
+{-RequiredNamedParam-}
+{-OptionalNamedParam-}

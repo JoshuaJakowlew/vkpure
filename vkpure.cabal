@@ -28,7 +28,9 @@ library
       VkApi
       VkApi.Auth
       VkApi.Core
+      VkApi.Internal.Named
       VkApi.Internal.Utils
+      VkApi.LongPoll
       VkApi.Messages
       VkApi.Methods
       VkApi.Types
@@ -51,7 +53,6 @@ library
       DeriveTraversable
       DerivingStrategies
       DerivingVia
-      DuplicateRecordFields
       EmptyCase
       FlexibleContexts
       FlexibleInstances
@@ -87,6 +88,8 @@ library
     , http-client
     , http-client-tls
     , lens
+    , named
+    , record-dot-preprocessor
     , record-hasfield
     , servant
     , servant-client
@@ -117,7 +120,6 @@ executable vkpure-exe
       DeriveTraversable
       DerivingStrategies
       DerivingVia
-      DuplicateRecordFields
       EmptyCase
       FlexibleContexts
       FlexibleInstances
@@ -154,6 +156,8 @@ executable vkpure-exe
     , http-client
     , http-client-tls
     , lens
+    , named
+    , record-dot-preprocessor
     , record-hasfield
     , servant
     , servant-client
@@ -186,7 +190,6 @@ test-suite vkpure-test
       DeriveTraversable
       DerivingStrategies
       DerivingVia
-      DuplicateRecordFields
       EmptyCase
       FlexibleContexts
       FlexibleInstances
@@ -223,6 +226,8 @@ test-suite vkpure-test
     , http-client
     , http-client-tls
     , lens
+    , named
+    , record-dot-preprocessor
     , record-hasfield
     , servant
     , servant-client

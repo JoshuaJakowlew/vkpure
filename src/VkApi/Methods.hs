@@ -17,5 +17,5 @@ type Api = RequiredQueryParam "access_token" Token
 
 data Methods routes 
   = Methods 
-    { longPollServer :: routes :- VkMessagesApi
-    } deriving (Generic)
+    { getLongPollServer :: routes :- VkMessagesApi 
+    } deriving stock (Generic)

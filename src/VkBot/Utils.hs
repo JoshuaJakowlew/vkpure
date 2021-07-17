@@ -2,7 +2,6 @@ module VkBot.Utils where
 
 
 import Data.Aeson
-import Data.Proxy
 import Data.Text
 import GHC.Generics
 import Servant.API
@@ -28,6 +27,9 @@ runLogPassAuth :: UserCredentials -> IO (Either ClientError LogPassAuthResponse)
 runLogPassAuth = runQuery "oauth.vk.com"  "" . logPassAuth
 
 
+runVk = runQuery "api.vk.com"
+
+runMethod = runVk "method"
 
 
 client' = client (Proxy @Api)

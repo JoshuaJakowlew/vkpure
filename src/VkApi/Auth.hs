@@ -42,4 +42,5 @@ getLogPassAuth :: Text -> Text -> Text -> Text -> Int -> Text -> Int -> ClientM 
 getLogPassAuth = client (Proxy @VkAuthApi)
 
 logPassAuth :: UserCredentials -> ClientM LogPassAuthResponse
-logPassAuth c = getLogPassAuth (c ^. #login) (c ^. #password) "password" "all" 2274003 "hHbZxrka2uZ6jB1inYsH" 1
+logPassAuth c = getLogPassAuth (login c) (password c) "password" "all" 2274003 "hHbZxrka2uZ6jB1inYsH" 1
+

@@ -1,4 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE DuplicateRecordFields #-}
 
 module VkApi.Types where
 
@@ -49,16 +50,7 @@ data Message = Message
   } deriving (Generic, Show)
 
 
-defaultUser = User 
-  { id              = 0
-  , firstName       = "Pasha"
-  , deactivated     = ""
-  , isClosed        = False
-  , lastName        = "Dura"
-  , canAccessClosed = True
-  } 
 
-foo = defaultUser ^. #firstName
 
 foldMap deriveJSON' 
   [ ''User
