@@ -18,6 +18,7 @@ jsonOptions  = defaultOptions
   { fieldLabelModifier     = snakeFieldModifier 
   , constructorTagModifier = snakeFieldModifier 
   , omitNothingFields      = True
+  , sumEncoding            = UntaggedValue
   }
 
 snakeFieldModifier ::  String -> String
