@@ -12,6 +12,7 @@ import VkApi.Internal.Utils
 import VkApi.Messages
 import VkApi.Core
 import VkBot.Utils
+import VkApi.Internal.Named
 import VkPure.Prelude
 
 data LongPollResult = LongPollResult
@@ -23,12 +24,12 @@ data LongPollResult = LongPollResult
 deriveJSON' 'LongPollResult
 
 type LongPollServerApi = 
-     RequiredQueryParam "version" Int
-  :> RequiredQueryParam "mode"    Int
-  :> RequiredQueryParam "act"     Text
-  :> RequiredQueryParam "key"     Text
-  :> RequiredQueryParam "wait"    Int
-  :> RequiredQueryParam "ts"      Int
+     RequiredNamedParam "version" "version" Int
+  :> RequiredNamedParam "mode"    "mode"    Int
+  :> RequiredNamedParam "act"     "act"     Text
+  :> RequiredNamedParam "key"     "key"     Text
+  :> RequiredNamedParam "wait"    "wait"    Int
+  :> RequiredNamedParam "ts"      "ts"      Int
   :> Get '[JSON] (LongPollResult)
 
 
