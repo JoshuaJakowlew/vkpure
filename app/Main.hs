@@ -26,8 +26,9 @@ import Data.Text
 import Network.HTTP.Client.TLS
 import qualified Servant.Client.Streaming as S
 import Named
+import Named.Internal
 
-import Prelude 
+import VkPure.Prelude 
 import VkApi.Internal.Utils
 import VkApi.Messages
 import VkApi.Methods
@@ -41,6 +42,11 @@ import VkBot.Utils
 user :: UserCredentials
 user = UserCredentials "89156343277" "Vha8124s"
 
+(!?):: forall a name b. (Maybe (NamedF Identity a name) -> b) -> Param ( name :! (Maybe a)) -> b
+fn !? (Param (Arg x)) = fn $ (Arg @_ @name) <$> x
+
+infixl 9 !?
+
 
 
 unwrap (Right shit) = shit
@@ -51,21 +57,19 @@ main = do
   let token = accessToken auth
 
   let lp = api (Token token) 
-  let bar = lp.getLongPollServer
-  let foo = lp.getLongPollServer ! #needPts 0
-  pure ()
+  res <- runMethod $ (lp ^. #getLongPollServer) 
+      !  param #needPts   0
+      !  param #lpVersion 3
+      !? param #groupId   Nothing
 
-  -- res <- runMethod $ ( lp.getLongPollServer )
-  --   ! #need_pts   (0 :: Int) 
-  --   ! #lp_version (3 :: Int)
-  --   ! #group_id   (Nothing :: Maybe Int)
+  case res of
+    Left err      -> putStrLn $ "Error: " <> show err
+    Right serv -> do
+      print serv  
+      let resp = serv^. #response
+      r <- runLp resp $ longPoll 10 234 "a_check" (resp ^. #key) 10 (resp ^. #ts)
+      print r
 
-  -- case res of
-  --   Left err      -> putStrLn $ "Error: " <> show err
-  --   Right serv -> do
-  --     print serv  
-  --     r <- runLp (serv.response) $ longPoll 10 234 "a_check" (serv.response.key) 10 (serv.response.ts)
-  --     print r
 
 -- https://server?act=a_check&key=key&ts=ts&wait=wait&mode=mode&version=version
 
