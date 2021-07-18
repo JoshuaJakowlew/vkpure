@@ -1,4 +1,3 @@
-
 module VkApi.Messages where
 
 import Data.Aeson
@@ -12,26 +11,35 @@ import VkApi.Internal.Utils
 import VkApi.Internal.Named
 import VkPure.Prelude
 
-data VkResponse a = VkResponse
+data VkSuccess a = VkSuccess
   { response :: a
   } deriving (Show, Generic)
 
+data VkError a = VkError
+  { error :: a
+  } deriving (Show, Generic)
+
+data VkResponse s e
+  = VkSuccessResponse (VkSuccess s)
+  | VkErrorResponse   (VkError   e)
+  deriving (Show, Generic)
+
+deriveJSON' ''VkSuccess
+deriveJSON' ''VkError
 deriveJSON' ''VkResponse
 
-data Server = Server
+data LongPollServer = LongPollServer
   { key    :: Text
   , server :: Text
   , ts     :: Int
   } deriving (Show, Generic)
 
-deriveJSON' ''Server
+deriveJSON' ''LongPollServer
+
+
 
 type VkMessagesApi = "messages.getLongPollServer"
   :> RequiredNamedParam "needPts"   "need_pts"   Int
   :> RequiredNamedParam "lpVersion" "lp_version" Int
   :> OptionalNamedParam "groupId"   "group_id"   Int
-  :> Get '[JSON] (VkResponse Server)
-
-{-RequiredNamedParam-}
-{-RequiredNamedParam-}
-{-OptionalNamedParam-}
+  :> Get '[JSON] (VkResponse LongPollServer Value)

@@ -23,7 +23,7 @@ default-extensions:
 - DeriveTraversable
 - DerivingStrategies
 - DerivingVia
-# - DuplicateRecordFields
+- DuplicateRecordFields
 - EmptyCase
 - FlexibleContexts
 - FlexibleInstances
@@ -74,6 +74,7 @@ dependencies:
 - servant-multipart-api
 - template-haskell
 - text
+- transformers
 - http-client
 - http-client-tls
 - named

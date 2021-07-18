@@ -2,7 +2,9 @@
 
 module VkApi.Auth where
 
+import Data.Function
 import Data.Aeson
+import Data.Kind
 import Data.Proxy
 import Data.Text
 import GHC.Generics
@@ -20,18 +22,26 @@ data UserCredentials = UserCredentials
   , password :: Text
   } deriving (Show, Generic)
 
-data LogPassAuthResponse 
-  = LogPassAuthResponse
-    { accessToken :: Text
-    , expiresIn   :: Int
-    , userId      :: Int
-    }
-  | LogPassAuthError
-    {  error            :: Text
-    ,  errorDescription :: Text 
-    ,  errorType        :: Text 
-    } deriving (Show, Generic)
+data AuthPass = AuthPass
+  { accessToken :: Text
+  , expiresIn   :: Int
+  , userId      :: Int
+  } deriving (Show, Generic)
 
+data AuthError = AuthError
+  {  error            :: Text
+  ,  errorDescription :: Text 
+  ,  errorType        :: Text 
+  } deriving (Show, Generic)
+
+data LogPassAuthResponse 
+  = LogPassAuthPass AuthPass
+  | LogPassAuthError AuthError
+  deriving (Show, Generic)
+
+
+deriveJSON' ''AuthPass
+deriveJSON' ''AuthError
 deriveJSON' ''LogPassAuthResponse
 
 type VkAuthApi = "token"
