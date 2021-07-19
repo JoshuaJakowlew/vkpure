@@ -25,8 +25,7 @@ import Servant.Types.SourceT (foreach)
 import Data.Text
 import Network.HTTP.Client.TLS
 import qualified Servant.Client.Streaming as S
-
-
+import Named
 import Data.Maybe (fromJust)
 import Control.Monad.Trans.Maybe
 import Control.Monad
@@ -38,12 +37,7 @@ import VkApi.Messages
 import VkApi.Methods
 import VkApi.Auth
 import VkApi.Core
-import VkApi.LongPollcase auth of
-    LogPassAuthPass(AuthPass{..}) -> do
-      liftIO $ print auth
-      let vk = api $ Token accessToken
-      
-      server <- longPollServer vk
+import VkApi.LongPoll
 import VkBot.Utils
 import VkBot.Auth
 
