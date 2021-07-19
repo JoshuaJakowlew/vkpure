@@ -38,7 +38,12 @@ import VkApi.Messages
 import VkApi.Methods
 import VkApi.Auth
 import VkApi.Core
-import VkApi.LongPoll
+import VkApi.LongPollcase auth of
+    LogPassAuthPass(AuthPass{..}) -> do
+      liftIO $ print auth
+      let vk = api $ Token accessToken
+      
+      server <- longPollServer vk
 import VkBot.Utils
 import VkBot.Auth
 
@@ -74,3 +79,12 @@ main = maybe' "failed" . runMaybeT $ do
           
         _ -> liftIO $ print "Fuck you, leatherman"
     _ -> liftIO $ putStrLn "Auth error"
+
+longPollCall :: LongPollServer -> MaybeT IO LongPollResponse
+longPollCall s = unwrap . runLp s $ longPoll
+                                  ! param #version 10
+                                  ! param #mode    234
+                                  ! param #act     "a_check"
+                                  ! param #key     (s ^. #key)
+                                  ! param #wait    10
+                                  ! param #ts      (s ^. #ts)

@@ -75,6 +75,7 @@ dependencies:
 - template-haskell
 - text
 - transformers
+- transformers-either
 - http-client
 - http-client-tls
 - named
