@@ -78,8 +78,6 @@ dependencies:
 - http-client
 - http-client-tls
 - named
-- record-dot-preprocessor # for new record syntax
-- record-hasfield         # for record-dot-preprocessor
 
 library:
   source-dirs: src
@@ -92,7 +90,6 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    - -F -pgmF=record-dot-preprocessor # for record-dot-preprocessor
     dependencies:
     - vkpure
 

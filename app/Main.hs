@@ -1,4 +1,3 @@
-{-# OPTIONS_GHC -F -pgmF=record-dot-preprocessor #-}
 {-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveGeneric #-}
@@ -63,10 +62,6 @@ fromResponse (Right x) = Just x
 fromResponse (Left (FailureResponse _ r)) = decode $ r ^. #responseBody
 fromResponse _ = Nothing
 
--- handleNothing
--- handleSuccess
--- handleError
-
 foo :: MaybeT IO LogPassAuthResponse
 foo = 
   MaybeT $ fromResponse <$> runLogPassAuth user
@@ -79,10 +74,6 @@ maybe' s v = v >>= \case
 
 main :: IO ()
 main = maybe' "failed" . runMaybeT $ do
-  -- fromResponse: игнорим ошибку серванта, плохо
-  -- fromJust: по сути игнорим ветки ошибки серванта
-  -- т.к. ветки с FailureResponse, InvalidContentTypeHeader
-  -- UnsupportedContentType и DecodeFailure могут содержать данные
   auth <- unwrap $ runLogPassAuth user
   liftIO $ print auth
 
@@ -98,8 +89,7 @@ main = maybe' "failed" . runMaybeT $ do
       case serv of
         VkSuccessResponse(VkSuccess s) -> do
           liftIO $ print s  
-          -- А вот тут мы проигнорили возможную ошибку от вк
-          --let s = serv^. #response
+
           event <-   unwrap . runLp s $ longPoll
                                       ! param #version 10
                                       ! param #mode    234
@@ -112,5 +102,4 @@ main = maybe' "failed" . runMaybeT $ do
             LongPollResponseError(_) -> liftIO $ print "Do you like what you see?"
           
         VkErrorResponse(VkError e) -> liftIO $ print "Fuck you, leatherman"
-    -- Явный тип ошибки не дает ее игнорить
     LogPassAuthError(_) -> liftIO $ putStrLn "Auth error"

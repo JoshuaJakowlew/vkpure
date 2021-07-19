@@ -16,24 +16,6 @@ import VkBot.Utils
 import VkApi.Internal.Named
 import VkPure.Prelude
 
-{- 
-interface LongPollResult {
-  // Приходит, если нет ошибок или при failed: 1
-  ts?: number
-  // Приходит, если нет ошибок и при наличии флага 32
-  pts?: number
-  // Приходит, если нет ошибок
-  updates?: any[]
-
-  failed?: 1 | 2 | 3 | 4
-
-  // Приходят только при failed: 4
-  min_version?: 0
-  max_version?: 13
-}
--}
-
-
 data LongPollSuccess = LongPollSuccess
   { ts      :: Int
   , pts     :: Int

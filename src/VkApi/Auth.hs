@@ -59,19 +59,3 @@ getLogPassAuth = client (Proxy @VkAuthApi)
 
 logPassAuth :: UserCredentials -> ClientM LogPassAuthResponse
 logPassAuth c = getLogPassAuth (login c) (password c) "password" "all" 2274003 "hHbZxrka2uZ6jB1inYsH" 1
-
-{- 
-
-{
-    "access_token": "748b2d5151bbf9a0dcc34cf444743897a56030c7079b328d5143d0200e55404f423422ba46ea7dfe306f1",
-    "expires_in": 0,
-    "user_id": 584134275
-}
-
-{
-    "error": "invalid_client",
-    "error_description": "Неправильный логин или пароль",
-    "error_type": "username_or_password_is_incorrect"
-}
-
--}

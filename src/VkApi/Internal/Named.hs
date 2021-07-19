@@ -9,7 +9,6 @@
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TypeOperators #-}
-{-# OPTIONS_GHC -F -pgmF=record-dot-preprocessor #-}
 
 module VkApi.Internal.Named where
 
