@@ -34,6 +34,7 @@ library
       VkApi.Messages
       VkApi.Methods
       VkApi.Types
+      VkBot.Auth
       VkBot.Utils
       VkPure.Prelude
   other-modules:
