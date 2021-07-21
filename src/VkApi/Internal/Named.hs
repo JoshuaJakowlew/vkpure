@@ -12,17 +12,11 @@
 
 module VkApi.Internal.Named where
 
-import Control.Exception (throwIO)
 import Data.Functor.Identity (Identity)
-import Named (NamedF (..), (!), (:!))
 import Named.Internal
-import Servant.API (Capture, Get, JSON, QueryParam', Required, Strict, ToHttpApiData, (:>), Optional)
-import Servant.API.Generic (Generic, (:-))
-import Servant.Client (runClientM)
-import Servant.Client.Generic (AsClientT, genericClientHoist)
+import Servant.API (Capture, QueryParam', Required, Strict, ToHttpApiData, Optional)
 
 import Prelude
-
 
 type NCapture name path ty = Capture path (name :! ty)
 type NQueryParam' types name path ty = QueryParam' types path (name :! ty)

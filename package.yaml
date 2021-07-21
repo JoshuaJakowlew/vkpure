@@ -91,6 +91,8 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -Wall 
+    - -freverse-errors
     dependencies:
     - vkpure
 

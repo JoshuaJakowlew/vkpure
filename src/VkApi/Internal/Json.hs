@@ -1,17 +1,15 @@
-module VkApi.Internal.Utils where
+module VkApi.Internal.Json where
 
 
 import Language.Haskell.TH
 import Data.Aeson.TH
-import Data.Aeson.Types
-import Data.Aeson
 import Data.Char
 import Data.List
 import VkPure.Prelude 
 
+
 deriveJSON' :: Name -> Q [Dec]
 deriveJSON' name = deriveJSON (jsonOptions) name
-
 
 jsonOptions ::  Options
 jsonOptions  = defaultOptions

@@ -27,14 +27,13 @@ library
   exposed-modules:
       VkApi
       VkApi.Auth
-      VkApi.Core
+      VkApi.Internal.Json
       VkApi.Internal.Named
-      VkApi.Internal.Utils
       VkApi.LongPoll
       VkApi.Messages
-      VkApi.Methods
       VkApi.Types
       VkBot.Auth
+      VkBot.LongPoll
       VkBot.Utils
       VkPure.Prelude
   other-modules:
@@ -148,7 +147,7 @@ executable vkpure-exe
       ViewPatterns
       QuasiQuotes
       NoImplicitPrelude
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall -freverse-errors
   build-depends:
       aeson
     , aeson-pretty

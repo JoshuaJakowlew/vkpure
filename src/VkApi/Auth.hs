@@ -2,25 +2,16 @@
 
 module VkApi.Auth where
 
-import Data.Function
-import Data.Aeson
-import Data.Kind
 import Data.Proxy
 import Data.Text
 import GHC.Generics
 import Servant.API
 import Servant.Client
-import Network.HTTP.Client (newManager, defaultManagerSettings)
-import Network.HTTP.Client.TLS
 
 import VkPure.Prelude 
-import VkApi.Core
-import VkApi.Internal.Utils
-
-data UserCredentials = UserCredentials
-  { login    :: Text
-  , password :: Text
-  } deriving (Show, Generic)
+import VkApi.Internal.Json
+import VkApi.Internal.Named
+import Named
 
 data AuthPass = AuthPass
   { accessToken :: Text
@@ -35,7 +26,7 @@ data AuthError = AuthError
   } deriving (Show, Generic)
 
 data LogPassAuthResponse 
-  = LogPassAuthPass AuthPass
+  = LogPassAuthPass  AuthPass
   | LogPassAuthError AuthError
   deriving (Show, Generic)
 
@@ -45,17 +36,25 @@ deriveJSON' ''AuthError
 deriveJSON' ''LogPassAuthResponse
 
 type VkAuthApi = "token"
-  :> RequiredQueryParam "username"      Text
-  :> RequiredQueryParam "password"      Text
-  :> RequiredQueryParam "grant_type"    Text
-  :> RequiredQueryParam "scope"         Text
-  :> RequiredQueryParam "client_id"     Int
-  :> RequiredQueryParam "client_secret" Text
-  :> RequiredQueryParam "2fa_supported" Int
+  :> RequiredNamedParam "username"       "username"      Text
+  :> RequiredNamedParam "password"       "password"      Text
+  :> RequiredNamedParam "grantType"      "grant_type"    Text
+  :> RequiredNamedParam "scope"          "scope"         Text
+  :> RequiredNamedParam "clientId"       "client_id"     Int
+  :> RequiredNamedParam "clientSecret"   "client_secret" Text
+  :> RequiredNamedParam "twofaSupported" "2fa_supported" Int
   :> Get '[JSON] LogPassAuthResponse
 
-getLogPassAuth :: Text -> Text -> Text -> Text -> Int -> Text -> Int -> ClientM LogPassAuthResponse
+
+
+getLogPassAuth 
+  ::  "username"       :! Text
+  ->  "password"       :! Text
+  ->  "grantType"      :! Text
+  ->  "scope"          :! Text
+  ->  "clientId"       :! Int 
+  ->  "clientSecret"   :! Text
+  ->  "twofaSupported" :! Int 
+  -> ClientM LogPassAuthResponse
 getLogPassAuth = client (Proxy @VkAuthApi)
 
-logPassAuth :: UserCredentials -> ClientM LogPassAuthResponse
-logPassAuth c = getLogPassAuth (login c) (password c) "password" "all" 2274003 "hHbZxrka2uZ6jB1inYsH" 1

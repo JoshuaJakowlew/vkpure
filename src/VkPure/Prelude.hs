@@ -5,7 +5,6 @@ module VkPure.Prelude
   , module Data.Proxy
   ) where
 
-
 import Prelude 
 import Control.Lens
 import Data.Generics.Labels

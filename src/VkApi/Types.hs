@@ -8,10 +8,23 @@ import Data.Array
 import Data.Aeson.TH
 import Language.Haskell.TH
 import Data.Text
-import VkApi.Internal.Utils
+import VkApi.Internal.Json
 
 import VkPure.Prelude
 import GHC.Generics
+
+data VkSuccess a = VkSuccess
+  { response :: a
+  } deriving (Show, Generic)
+
+data VkError a = VkError
+  { error :: a
+  } deriving (Show, Generic)
+
+data VkResponse s e
+  = VkSuccessResponse (VkSuccess s)
+  | VkErrorResponse   (VkError   e)
+  deriving (Show, Generic)
 
 data User = User 
   { id              :: Int
@@ -55,5 +68,8 @@ data Message = Message
 foldMap deriveJSON' 
   [ ''User
   , ''Message
+  , ''VkSuccess
+  , ''VkError
+  , ''VkResponse
   ]
 

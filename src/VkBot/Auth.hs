@@ -4,42 +4,34 @@ module VkBot.Auth where
 
 import Data.Aeson
 import Data.Text
+import GHC.Generics
 import Control.Monad.Trans.Maybe
 import Control.Monad.Trans.Either
 import Servant.Client
 import Servant.Client.Generic
 import Named
 
-import VkApi.Methods
-import VkApi.Auth
-import VkApi.Messages
-import VkApi.LongPoll
-import VkApi.Core
+import VkApi
 import VkApi.Internal.Named
 import VkBot.Utils
 import VkPure.Prelude
 
--- Currently unused
--- Прикрутить сюда EitherT
--- Прикрутить сюда ContT
-authUserLongPoll :: UserCredentials -> MaybeT IO (Either Text LongPollServer)
-authUserLongPoll user = do
-  auth <- unwrap $ runLogPassAuth user
-  handleAuth auth
-  where
-    handleAuth auth = case auth of
-      LogPassAuthPass(AuthPass{..}) -> do
-        let vk = api $ Token accessToken
-        server <- longPollServer vk
-        handleLongPoll server
-      _ -> pure $ Left "Wrong credentials"
+data UserCredentials = UserCredentials
+  { login    :: Text
+  , password :: Text
+  } deriving (Show, Generic)
 
-    handleLongPoll server = case server of
-        VkSuccessResponse(VkSuccess s) -> pure $ Right s
-        _ -> pure $ Left "Cannot get long poll server"
+runLogPassAuth :: UserCredentials -> IO (Either ClientError LogPassAuthResponse)
+runLogPassAuth = runQuery "oauth.vk.com"  "" . logPassAuth
 
-longPollServer :: Methods (AsClientT ClientM) -> MaybeT IO (VkResponse LongPollServer Value)
-longPollServer vk = unwrap . runMethod $ (vk ^.  #getLongPollServer)
-                                       !  param  #lpVersion 10
-                                       !  param  #needPts   0
-                                       !? param  #groupId   Nothing
+logPassAuth :: UserCredentials -> ClientM LogPassAuthResponse
+logPassAuth c = getLogPassAuth ! param #username       (c ^. #login) 
+                               ! param #password       (c ^. #password)
+                               ! param #grantType      "password"
+                               ! param #scope          "all"
+                               ! param #clientId       2274003
+                               ! param #clientSecret   "hHbZxrka2uZ6jB1inYsH"
+                               ! param #twofaSupported 1 
+
+
+                        

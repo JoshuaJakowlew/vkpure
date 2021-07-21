@@ -3,16 +3,12 @@ module VkApi.LongPoll where
 
 import GHC.Generics
 import Servant.API
-import Servant.API.Generic
 import Servant.Client
 import Data.Text
 import Data.Aeson
+import Named
 
-
-import VkApi.Internal.Utils
-import VkApi.Messages
-import VkApi.Core
-import VkBot.Utils
+import VkApi.Internal.Json
 import VkApi.Internal.Named
 import VkPure.Prelude
 
@@ -47,9 +43,12 @@ type LongPollServerApi =
   :> RequiredNamedParam "ts"      "ts"      Int
   :> Get '[JSON] (LongPollResponse)
 
-runLp :: LongPollServer -> ClientM a -> IO (Either ClientError a)
-runLp server' = runQuery urlHost urlPath 
-  where
-    [urlHost, urlPath] = unpack <$> splitOn "/" (server server')
-
+longPoll ::
+  "version" :! Int 
+  -> "mode" :! Int 
+  -> "act"  :! Text 
+  -> "key"  :! Text
+  -> "wait" :! Int 
+  -> "ts"   :! Int
+  -> ClientM LongPollResponse
 longPoll = client (Proxy @LongPollServerApi)
