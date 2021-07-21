@@ -7,11 +7,11 @@ import Data.Text
 import GHC.Generics
 import Servant.API
 import Servant.Client
+import Named
 
-import VkPure.Prelude 
 import VkApi.Internal.Json
 import VkApi.Internal.Named
-import Named
+import VkPure.Prelude 
 
 data AuthPass = AuthPass
   { accessToken :: Text
@@ -30,12 +30,11 @@ data LogPassAuthResponse
   | LogPassAuthError AuthError
   deriving (Show, Generic)
 
-
 deriveJSON' ''AuthPass
 deriveJSON' ''AuthError
 deriveJSON' ''LogPassAuthResponse
 
-type VkAuthApi = "token"
+type LogPassAuthApi   = "token"
   :> RequiredNamedParam "username"       "username"      Text
   :> RequiredNamedParam "password"       "password"      Text
   :> RequiredNamedParam "grantType"      "grant_type"    Text
@@ -44,8 +43,6 @@ type VkAuthApi = "token"
   :> RequiredNamedParam "clientSecret"   "client_secret" Text
   :> RequiredNamedParam "twofaSupported" "2fa_supported" Int
   :> Get '[JSON] LogPassAuthResponse
-
-
 
 getLogPassAuth 
   ::  "username"       :! Text
@@ -56,5 +53,5 @@ getLogPassAuth
   ->  "clientSecret"   :! Text
   ->  "twofaSupported" :! Int 
   -> ClientM LogPassAuthResponse
-getLogPassAuth = client (Proxy @VkAuthApi)
+getLogPassAuth = client (Proxy @LogPassAuthApi)
 

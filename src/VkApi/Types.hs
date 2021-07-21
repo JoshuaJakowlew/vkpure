@@ -13,17 +13,17 @@ import VkApi.Internal.Json
 import VkPure.Prelude
 import GHC.Generics
 
-data VkSuccess a = VkSuccess
+data VkApiSuccess a = VkSuccess
   { response :: a
   } deriving (Show, Generic)
 
-data VkError a = VkError
+data VkApiError a = VkError
   { error :: a
   } deriving (Show, Generic)
 
-data VkResponse s e
-  = VkSuccessResponse (VkSuccess s)
-  | VkErrorResponse   (VkError   e)
+data VkApiResponse s e
+  = VkSuccessResponse (VkApiSuccess s)
+  | VkErrorResponse   (VkApiError   e)
   deriving (Show, Generic)
 
 data User = User 
@@ -62,14 +62,11 @@ data Message = Message
   , messageTag            :: Text
   } deriving (Generic, Show)
 
-
-
-
 foldMap deriveJSON' 
   [ ''User
   , ''Message
-  , ''VkSuccess
-  , ''VkError
-  , ''VkResponse
+  , ''VkApiSuccess
+  , ''VkApiError
+  , ''VkApiResponse
   ]
 

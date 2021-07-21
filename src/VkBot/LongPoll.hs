@@ -1,4 +1,7 @@
-module VkBot.LongPoll where
+module VkBot.LongPoll
+  ( getLongPollUpdates
+  , longPollServer
+  ) where
 
 import Data.Aeson
 import Data.Text
@@ -12,22 +15,22 @@ import VkApi
 import VkBot.Utils
 import VkPure.Prelude
 
-runLp :: LongPollServer -> ClientM a -> IO (Either ClientError a)
-runLp server' = runQuery urlHost urlPath 
+longPollServer :: Methods (AsClientT ClientM) -> MaybeT IO (VkApiResponse GetLongPollServerResponse Value)
+longPollServer vk = unwrap . runMethod $ (vk ^. #getLongPollServer)
+                                       !  param #lpVersion 10
+                                       !  param #needPts   0
+                                       !? param #groupId   Nothing
+
+getLongPollUpdates :: GetLongPollServerResponse -> MaybeT IO LongPollResponse
+getLongPollUpdates s = unwrap . runLongPoll s $ longPollRequest
+                                              ! param #version 10
+                                              ! param #mode    234
+                                              ! param #act     "a_check" --magic constant
+                                              ! param #key     (s ^. #key)
+                                              ! param #wait    10
+                                              ! param #ts      (s ^. #ts)
+
+runLongPoll :: GetLongPollServerResponse -> ClientM a -> IO (Either ClientError a)
+runLongPoll s = runQuery urlHost urlPath 
   where
-    [urlHost, urlPath] = unpack <$> splitOn "/" (server server')
-
-longPollServer :: Methods (AsClientT ClientM) -> MaybeT IO (VkResponse LongPollServer Value)
-longPollServer vk = unwrap . runMethod $ (vk ^.  #getLongPollServer)
-                                       !  param  #lpVersion 10
-                                       !  param  #needPts   0
-                                       !? param  #groupId   Nothing
-
-longPollCall :: LongPollServer -> MaybeT IO LongPollResponse
-longPollCall s = unwrap . runLp s $ longPoll
-                                  ! param #version 10
-                                  ! param #mode    234
-                                  ! param #act     "a_check" --magic constant
-                                  ! param #key     (s ^. #key)
-                                  ! param #wait    10
-                                  ! param #ts      (s ^. #ts)
+    [urlHost, urlPath] = unpack <$> splitOn "/" (s ^. #server)

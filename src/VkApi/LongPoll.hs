@@ -34,7 +34,7 @@ deriveJSON' ''LongPollSuccess
 deriveJSON' ''LongPollError
 deriveJSON' ''LongPollResponse
 
-type LongPollServerApi = 
+type LongPollRequestApi = 
      RequiredNamedParam "version" "version" Int
   :> RequiredNamedParam "mode"    "mode"    Int
   :> RequiredNamedParam "act"     "act"     Text
@@ -43,7 +43,7 @@ type LongPollServerApi =
   :> RequiredNamedParam "ts"      "ts"      Int
   :> Get '[JSON] (LongPollResponse)
 
-longPoll ::
+longPollRequest ::
   "version" :! Int 
   -> "mode" :! Int 
   -> "act"  :! Text 
@@ -51,4 +51,4 @@ longPoll ::
   -> "wait" :! Int 
   -> "ts"   :! Int
   -> ClientM LongPollResponse
-longPoll = client (Proxy @LongPollServerApi)
+longPollRequest = client (Proxy @LongPollRequestApi)

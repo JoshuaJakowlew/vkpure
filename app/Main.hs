@@ -47,7 +47,7 @@ main = maybe' "failed" . runMaybeT $ do
         VkSuccessResponse(VkSuccess s) -> do
           liftIO $ print s
           
-          event <- longPollCall s
+          event <- getLongPollUpdates s
           case event of
             LongPollResponseSuccess(e) -> liftIO $ print e
             _ -> liftIO $ putStrLn "Do you like what you see?"

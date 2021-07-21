@@ -1,18 +1,16 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module VkBot.Auth where
+module VkBot.Auth
+  ( UserCredentials(..)
+  , runLogPassAuth
+  ) where
 
-import Data.Aeson
 import Data.Text
 import GHC.Generics
-import Control.Monad.Trans.Maybe
-import Control.Monad.Trans.Either
 import Servant.Client
-import Servant.Client.Generic
 import Named
 
 import VkApi
-import VkApi.Internal.Named
 import VkBot.Utils
 import VkPure.Prelude
 
