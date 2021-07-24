@@ -15,13 +15,14 @@ module Main where
 import Control.Monad.Trans.Except
 import Control.Monad
 import Control.Monad.IO.Class (liftIO)
-
+import Servant.Client
+import Servant.Client.Generic
 
 import VkPure.Prelude 
 import VkApi
 import VkBot.Utils
 import VkBot.Auth
-import VkBot.LongPoll
+import qualified VkBot.LongPoll as LP
 
 user :: UserCredentials
 user = UserCredentials "89156343277" "Vha8124s"
@@ -33,23 +34,22 @@ either' v = v >>= \case
 
 main :: IO ()
 main = either' . runExceptT $ do
-  auth <- unwrap $ runLogPassAuth user
-
-  case auth of
-    LogPassAuthPass(AuthPass{..}) -> do
-      liftIO $ print auth
-      let vk = api $ Token accessToken
+  s <- auth user >>= longPollServer
       
-      server <- longPollServer vk
-      case server of
-        VkSuccessResponse(VkSuccess s) -> do
-          liftIO $ print s
-          
-          event <- getLongPollUpdates s
-          case event of
-            LongPollResponseSuccess(e) -> liftIO $ print e
-            _ -> throwE "Do you like what you see?"
-          
-        _ -> throwE "Fuck you, leatherman"
-    _ -> throwE "Auth error"
+  event <- LP.getLongPollUpdates s
+  case event of
+    LongPollResponseSuccess(e) -> liftIO $ print e
+    _ -> throwE "Do you like what you see?"
 
+longPollServer :: Methods (AsClientT ClientM) -> ExceptT ErrorType IO GetLongPollServerResponse
+longPollServer vk =
+  (LP.longPollServer vk) >>= \case
+    VkSuccessResponse(VkSuccess s) -> pure s
+    _ -> throwE "Can't get long poll server"
+
+
+auth :: UserCredentials -> ExceptT ErrorType IO (Methods (AsClientT ClientM))
+auth user =
+  (unwrap $ runLogPassAuth user) >>= \case
+    LogPassAuthPass(AuthPass{..}) -> pure $ api $ Token accessToken
+    _ -> throwE "Auth error"
