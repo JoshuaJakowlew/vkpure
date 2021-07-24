@@ -16,6 +16,7 @@ import Servant.API
 import Servant.API.Generic
 import Data.Aeson
 import Data.Text
+import Named
 
 import VkApi.Auth 
 import VkApi.Messages
@@ -41,6 +42,13 @@ data Methods routes = Methods
   { getLongPollServer :: routes :- VkMessagesApi 
   } deriving stock (Generic)
 
+client'
+  :: Token
+  -> ApiVersion
+  -> "needPts"   :! Int
+  -> "lpVersion" :! Int
+  -> Maybe ("groupId" :! Int)
+  -> ClientM (VkApiResponse GetLongPollServerResponse Value)
 client' = client (Proxy @Api)
 
 api :: Token -> Methods (AsClientT ClientM)

@@ -45,13 +45,13 @@ type LogPassAuthApi   = "token"
   :> Get '[JSON] LogPassAuthResponse
 
 getLogPassAuth 
-  ::  "username"       :! Text
-  ->  "password"       :! Text
-  ->  "grantType"      :! Text
-  ->  "scope"          :! Text
-  ->  "clientId"       :! Int 
-  ->  "clientSecret"   :! Text
-  ->  "twofaSupported" :! Int 
+  :: "username"       :! Text
+  -> "password"       :! Text
+  -> "grantType"      :! Text
+  -> "scope"          :! Text
+  -> "clientId"       :! Int 
+  -> "clientSecret"   :! Text
+  -> "twofaSupported" :! Int 
   -> ClientM LogPassAuthResponse
 getLogPassAuth = client (Proxy @LogPassAuthApi)
 

@@ -82,6 +82,9 @@ dependencies:
 
 library:
   source-dirs: src
+  ghc-options:
+  - -Wall 
+  - -freverse-errors
 
 executables:
   vkpure-exe:
@@ -93,6 +96,7 @@ executables:
     - -with-rtsopts=-N
     - -Wall 
     - -freverse-errors
+    - -O2
     dependencies:
     - vkpure
 

@@ -12,15 +12,9 @@
 
 module Main where
   
-import Control.Monad.Trans.Either
 import Control.Monad.Trans.Except
 import Control.Monad
 import Control.Monad.IO.Class (liftIO)
-import Data.Text
-import Data.Aeson
-import Servant.Client
-import Servant.Client.Generic
-import Named
 
 
 import VkPure.Prelude 
@@ -38,7 +32,7 @@ either' v = v >>= \case
   _ -> pure ()
 
 main :: IO ()
-main = either' . runEitherT $ do
+main = either' . runExceptT $ do
   auth <- unwrap $ runLogPassAuth user
 
   case auth of

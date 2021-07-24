@@ -3,15 +3,11 @@
 
 module VkApi.Types where
 
-import Data.Aeson
-import Data.Array
-import Data.Aeson.TH
-import Language.Haskell.TH
 import Data.Text
-import VkApi.Internal.Json
-
-import VkPure.Prelude
 import GHC.Generics
+
+import VkApi.Internal.Json
+import VkPure.Prelude
 
 data VkApiSuccess a = VkSuccess
   { response :: a

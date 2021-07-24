@@ -5,7 +5,6 @@ module VkBot.LongPoll
 
 import Data.Aeson
 import Data.Text
-import Control.Monad.Trans.Maybe
 import Control.Monad.Trans.Except
 import Servant.Client
 import Servant.Client.Generic

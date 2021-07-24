@@ -79,6 +79,7 @@ library
       ViewPatterns
       QuasiQuotes
       NoImplicitPrelude
+  ghc-options: -Wall -freverse-errors
   build-depends:
       aeson
     , aeson-pretty
@@ -147,7 +148,7 @@ executable vkpure-exe
       ViewPatterns
       QuasiQuotes
       NoImplicitPrelude
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall -freverse-errors
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall -freverse-errors -O2
   build-depends:
       aeson
     , aeson-pretty
