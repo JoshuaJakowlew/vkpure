@@ -6,7 +6,7 @@ module VkBot.LongPoll
 import Data.Aeson
 import Data.Text
 import Control.Monad.Trans.Maybe
-import Control.Monad.Trans.Either
+import Control.Monad.Trans.Except
 import Servant.Client
 import Servant.Client.Generic
 import Named
@@ -15,13 +15,13 @@ import VkApi
 import VkBot.Utils
 import VkPure.Prelude
 
-longPollServer :: Methods (AsClientT ClientM) -> MaybeT IO (VkApiResponse GetLongPollServerResponse Value)
+longPollServer :: Methods (AsClientT ClientM) -> ExceptT ErrorType IO (VkApiResponse GetLongPollServerResponse Value)
 longPollServer vk = unwrap . runMethod $ (vk ^. #getLongPollServer)
                                        !  param #lpVersion 10
                                        !  param #needPts   0
                                        !? param #groupId   Nothing
 
-getLongPollUpdates :: GetLongPollServerResponse -> MaybeT IO LongPollResponse
+getLongPollUpdates :: GetLongPollServerResponse -> ExceptT ErrorType IO LongPollResponse
 getLongPollUpdates s = unwrap . runLongPoll s $ longPollRequest
                                               ! param #version 10
                                               ! param #mode    234

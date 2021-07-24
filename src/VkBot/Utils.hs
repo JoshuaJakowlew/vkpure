@@ -5,18 +5,25 @@ import Data.Aeson
 import Servant.Client
 import Network.HTTP.Client (newManager)
 import Network.HTTP.Client.TLS
-import Control.Monad.Trans.Maybe
+import Control.Monad.Trans.Except
+import Data.Text
 
 import VkPure.Prelude
 
+type ErrorType = Text
 
-unwrap :: (Monad m, FromJSON a) => m (Either ClientError a) -> MaybeT m a
-unwrap = MaybeT . fmap fromResponse
+-- TODO: Refactor me
+fromMaybe :: e -> Maybe a -> Either e a
+fromMaybe _ (Just x) = Right x
+fromMaybe e _ = Left e
 
-fromResponse :: FromJSON a => Either ClientError a -> Maybe a
-fromResponse (Right x) = Just x
-fromResponse (Left (FailureResponse _ r)) = decode $ r ^. #responseBody
-fromResponse _ = Nothing
+unwrap :: (Monad m, FromJSON a) => m (Either ClientError a) -> ExceptT ErrorType m a
+unwrap = ExceptT . fmap fromResponse
+
+fromResponse :: FromJSON a => Either ClientError a -> Either ErrorType a
+fromResponse (Right x) = Right x
+fromResponse (Left (FailureResponse _ r)) = fromMaybe "No" $ decode $ r ^. #responseBody
+fromResponse _ = Left "no"
 
 runQuery :: String -> String -> ClientM a -> IO (Either ClientError a)
 runQuery urlHost urlPath query  = do

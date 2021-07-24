@@ -12,9 +12,16 @@
 
 module Main where
   
-import Control.Monad.Trans.Maybe
+import Control.Monad.Trans.Either
+import Control.Monad.Trans.Except
 import Control.Monad
 import Control.Monad.IO.Class (liftIO)
+import Data.Text
+import Data.Aeson
+import Servant.Client
+import Servant.Client.Generic
+import Named
+
 
 import VkPure.Prelude 
 import VkApi
@@ -22,19 +29,16 @@ import VkBot.Utils
 import VkBot.Auth
 import VkBot.LongPoll
 
-
-
 user :: UserCredentials
 user = UserCredentials "89156343277" "Vha8124s"
 
-  
-maybe' ::  String -> IO (Maybe a)  -> IO ()  
-maybe' s v = v >>= \case
-  Just _ -> pure ()
-  Nothing -> putStrLn s
-  
+either' :: Show e => IO (Either e a) -> IO ()
+either' v = v >>= \case
+  Left e -> print e
+  _ -> pure ()
+
 main :: IO ()
-main = maybe' "failed" . runMaybeT $ do
+main = either' . runEitherT $ do
   auth <- unwrap $ runLogPassAuth user
 
   case auth of
@@ -50,10 +54,8 @@ main = maybe' "failed" . runMaybeT $ do
           event <- getLongPollUpdates s
           case event of
             LongPollResponseSuccess(e) -> liftIO $ print e
-            _ -> liftIO $ putStrLn "Do you like what you see?"
+            _ -> throwE "Do you like what you see?"
           
-        _ -> liftIO $ putStrLn "Fuck you, leatherman"
-    _ -> liftIO $ putStrLn "Auth error"
-
-
+        _ -> throwE "Fuck you, leatherman"
+    _ -> throwE "Auth error"
 
