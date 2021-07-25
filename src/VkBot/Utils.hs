@@ -12,7 +12,7 @@ import VkPure.Prelude
 
 type ErrorType = Text
 
--- TODO: Refactor me
+-- // TODO: Refactor me
 fromMaybe :: e -> Maybe a -> Either e a
 fromMaybe _ (Just x) = Right x
 fromMaybe e _ = Left e

@@ -33,12 +33,3 @@ runLongPoll :: GetLongPollServerResponse -> ClientM a -> IO (Either ClientError 
 runLongPoll s = runQuery urlHost urlPath 
   where
     [urlHost, urlPath] = unpack <$> splitOn "/" (s ^. #server)
-
-{-
-call :: Server -> Updates
-process :: Updates -> ()
-repeat
-
-call :: GetLongPollServerResponse -> ExceptT ErrorType IO LongPollResponse
-process :: [Event] -> ExceptT ErrorType IO
--}
