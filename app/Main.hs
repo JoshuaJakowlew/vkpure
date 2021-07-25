@@ -39,17 +39,17 @@ main = either' . runExceptT $ do
 -- // TODO: Use pts param => update types
 longPollLoop :: (LongPollSuccess -> IO ()) -> GetLongPollServerResponse -> ExceptT ErrorType IO ()
 longPollLoop action server = do
-  lpResponse <- longPollupdates server
+  lpResponse <- longPollUpdates server
   
   liftIO $ action lpResponse
 
   let server' = server & #ts .~ (lpResponse ^. #ts)
   longPollLoop action server'
   
-longPollupdates :: GetLongPollServerResponse -> ExceptT ErrorType IO LongPollSuccess
-longPollupdates s = (LP.getLongPollUpdates s) >>= \case
+longPollUpdates :: GetLongPollServerResponse -> ExceptT ErrorType IO LongPollSuccess
+longPollUpdates s = (LP.getLongPollUpdates s) >>= \case
     LongPollResponseSuccess(e) -> pure e
-    _ -> throwE "Do you like what you see?"
+    _ -> throwE "Can't get updates"
 
 longPollServer :: Methods (AsClientT ClientM) -> ExceptT ErrorType IO GetLongPollServerResponse
 longPollServer vk =
