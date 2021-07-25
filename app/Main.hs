@@ -34,22 +34,20 @@ either' v = v >>= \case
 
 main :: IO ()
 main = either' . runExceptT $ do
-  s <- auth user >>= longPollServer
+  auth user >>= longPollServer >>= longPollLoop print
 
-  fornever s \lp -> print lp
+-- // TODO: Use pts param => update types
+longPollLoop :: (LongPollSuccess -> IO ()) -> GetLongPollServerResponse -> ExceptT ErrorType IO ()
+longPollLoop action server = do
+  lpResponse <- longPollupdates server
   
+  liftIO $ action lpResponse
 
-fornever :: GetLongPollServerResponse -> (LongPollSuccess -> IO ()) -> ExceptT ErrorType IO ()
-fornever r act = do
-  lp <- updates' r
-  liftIO $ act lp
-  let x = set #ts (lp ^. #ts) r
-  fornever x act
+  let server' = server & #ts .~ (lpResponse ^. #ts)
+  longPollLoop action server'
   
-
-
-updates' :: GetLongPollServerResponse -> ExceptT ErrorType IO LongPollSuccess
-updates' s = (LP.getLongPollUpdates s) >>= \case
+longPollupdates :: GetLongPollServerResponse -> ExceptT ErrorType IO LongPollSuccess
+longPollupdates s = (LP.getLongPollUpdates s) >>= \case
     LongPollResponseSuccess(e) -> pure e
     _ -> throwE "Do you like what you see?"
 

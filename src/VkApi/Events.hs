@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveAnyClass #-}
+
 module VkApi.Events where
 
 import GHC.Generics
@@ -5,6 +7,7 @@ import Data.Aeson
 import Data.Text
 import qualified Data.Vector as Vec
 
+import VkApi.Internal.Json
 import VkPure.Prelude
 
 data NewMessage =
@@ -19,11 +22,12 @@ data NewMessage =
     , editTime              :: Int
     } deriving (Show, Generic)
 
+deriveJSON' ''NewMessage
 
 data Event
   = EventNewMessage NewMessage
-  | Kek Int
-  deriving (Show, Generic)
+  | EventUnknown
+  deriving (Show, Generic, ToJSON)
 
 isNumber (Number _) = True
 isNumber _          = False
@@ -36,14 +40,11 @@ parseEvent :: Value -> Event
 parseEvent (Array arr) = let
   eventId = Vec.head arr
   in if not (isNumber eventId)
-    then Kek (-2)
-    else case unwrapNum eventId of 
-          3  -> parseNewMessage arr
-          4  -> parseNewMessage arr
-          5  -> parseNewMessage arr
-          18 -> parseNewMessage arr
-          x  -> Kek x
-parseEvent _  = Kek (-1)
+    then EventUnknown
+    else case unwrapNum eventId of
+      id | id `elem` [3, 4, 5, 18] -> parseNewMessage arr
+      _ -> EventUnknown
+parseEvent _  = EventUnknown
 
 
 parseNewMessage arr = EventNewMessage $
@@ -60,6 +61,3 @@ parseNewMessage arr = EventNewMessage $
 
 instance FromJSON Event where
   parseJSON v = pure $ parseEvent v
-
-instance ToJSON Event where
-  toJSON v = undefined
