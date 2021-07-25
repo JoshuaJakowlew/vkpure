@@ -3,6 +3,7 @@ module VkApi
   , module VkApi.Messages
   , module VkApi.LongPoll
   , module VkApi.Types
+  , module VkApi.Events
   , Methods (..)
   , Token (..)
   , (!?)
@@ -22,6 +23,7 @@ import VkApi.Auth
 import VkApi.Messages
 import VkApi.LongPoll
 import VkApi.Types
+import VkApi.Events
 import VkApi.Internal.Named
 import VkPure.Prelude
 

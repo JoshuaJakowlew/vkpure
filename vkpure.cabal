@@ -27,6 +27,7 @@ library
   exposed-modules:
       VkApi
       VkApi.Auth
+      VkApi.Events
       VkApi.Internal.Json
       VkApi.Internal.Named
       VkApi.LongPoll
@@ -101,6 +102,7 @@ library
     , text
     , transformers
     , transformers-either
+    , vector
   default-language: Haskell2010
 
 executable vkpure-exe
@@ -170,6 +172,7 @@ executable vkpure-exe
     , text
     , transformers
     , transformers-either
+    , vector
     , vkpure
   default-language: Haskell2010
 
@@ -241,5 +244,6 @@ test-suite vkpure-test
     , text
     , transformers
     , transformers-either
+    , vector
     , vkpure
   default-language: Haskell2010

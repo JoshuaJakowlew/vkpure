@@ -35,10 +35,22 @@ either' v = v >>= \case
 main :: IO ()
 main = either' . runExceptT $ do
   s <- auth user >>= longPollServer
-      
-  event <- LP.getLongPollUpdates s
-  case event of
-    LongPollResponseSuccess(e) -> liftIO $ print e
+
+  fornever s \lp -> print lp
+  
+
+fornever :: GetLongPollServerResponse -> (LongPollSuccess -> IO ()) -> ExceptT ErrorType IO ()
+fornever r act = do
+  lp <- updates' r
+  liftIO $ act lp
+  let x = set #ts (lp ^. #ts) r
+  fornever x act
+  
+
+
+updates' :: GetLongPollServerResponse -> ExceptT ErrorType IO LongPollSuccess
+updates' s = (LP.getLongPollUpdates s) >>= \case
+    LongPollResponseSuccess(e) -> pure e
     _ -> throwE "Do you like what you see?"
 
 longPollServer :: Methods (AsClientT ClientM) -> ExceptT ErrorType IO GetLongPollServerResponse
@@ -47,9 +59,9 @@ longPollServer vk =
     VkSuccessResponse(VkSuccess s) -> pure s
     _ -> throwE "Can't get long poll server"
 
-
 auth :: UserCredentials -> ExceptT ErrorType IO (Methods (AsClientT ClientM))
 auth user =
   (unwrap $ runLogPassAuth user) >>= \case
     LogPassAuthPass(AuthPass{..}) -> pure $ api $ Token accessToken
     _ -> throwE "Auth error"
+

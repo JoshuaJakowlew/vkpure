@@ -10,12 +10,13 @@ import Named
 
 import VkApi.Internal.Json
 import VkApi.Internal.Named
+import VkApi.Events
 import VkPure.Prelude
 
 data LongPollSuccess = LongPollSuccess
   { ts      :: Int
   , pts     :: Int
-  , updates :: Value
+  , updates :: [Event]
   } deriving (Show, Generic)
 
 data LongPollError = LongPollError 

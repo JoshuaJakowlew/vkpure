@@ -79,6 +79,7 @@ dependencies:
 - http-client
 - http-client-tls
 - named
+- vector
 
 library:
   source-dirs: src
