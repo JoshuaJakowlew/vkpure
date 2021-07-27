@@ -31,6 +31,7 @@ library
       VkApi.Internal.Json
       VkApi.Internal.Named
       VkApi.LongPoll
+      VkApi.MessageFlags
       VkApi.Messages
       VkApi.Types
       VkBot.Auth
@@ -88,6 +89,7 @@ library
     , base >=4.7 && <5
     , bytestring
     , generic-lens
+    , ghc-prim
     , http-client
     , http-client-tls
     , lens
@@ -158,6 +160,7 @@ executable vkpure-exe
     , base >=4.7 && <5
     , bytestring
     , generic-lens
+    , ghc-prim
     , http-client
     , http-client-tls
     , lens
@@ -230,6 +233,7 @@ test-suite vkpure-test
     , base >=4.7 && <5
     , bytestring
     , generic-lens
+    , ghc-prim
     , http-client
     , http-client-tls
     , lens

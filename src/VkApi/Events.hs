@@ -5,15 +5,17 @@ module VkApi.Events where
 import GHC.Generics
 import Data.Aeson
 import Data.Text
+import Data.Word (Word32)
 import qualified Data.Vector as Vec
 
+import VkApi.MessageFlags
 import VkApi.Internal.Json
 import VkPure.Prelude
 
-data NewMessage =
-  NewMessage
+data Message =
+  Message
     { msgId                 :: Int
-    , flags                 :: Int
+    , flags                 :: Word32
     , peerId                :: Int
     , timestamp             :: Int
     , text                  :: Text
@@ -22,13 +24,16 @@ data NewMessage =
     , editTime              :: Int
     } deriving (Show, Generic)
 
-deriveJSON' ''NewMessage
+deriveJSON' ''Message
 
 data Event
-  = EventNewMessage NewMessage
+  = EventNewMessage Message
+  | EventMessageEdit Message
+  | EventMessageChange Message
   | EventUnknown
   deriving (Show, Generic, ToJSON)
 
+  
 isNumber (Number _) = True
 isNumber _          = False
 
@@ -42,13 +47,14 @@ parseEvent (Array arr) = let
   in if not (isNumber eventId)
     then EventUnknown
     else case unwrapNum eventId of
-      id | id `elem` [3, 4, 5, 18] -> parseNewMessage arr
-      _ -> EventUnknown
+      4  -> EventNewMessage $ parseMessage arr
+      5  -> EventMessageEdit $ parseMessage arr
+      18 -> EventMessageChange $ parseMessage arr
+      _  -> EventUnknown
 parseEvent _  = EventUnknown
 
-
-parseNewMessage arr = EventNewMessage $
-  NewMessage
+parseMessage arr =
+  Message
     { msgId                 = unwrapNum  $ arr Vec.! 1
     , flags                 = unwrapNum  $ arr Vec.! 2
     , peerId                = unwrapNum  $ arr Vec.! 3

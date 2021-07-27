@@ -80,6 +80,7 @@ dependencies:
 - http-client-tls
 - named
 - vector
+- ghc-prim
 
 library:
   source-dirs: src
