@@ -3,9 +3,11 @@
 module VkApi.Events where
 
 import GHC.Generics
+import GHC.Prim (coerce)
 import Data.Aeson
 import Data.Text
 import Data.Word (Word32)
+import Data.Int (Int32)
 import qualified Data.Vector as Vec
 
 import VkApi.MessageFlags
@@ -26,13 +28,26 @@ data Message =
 
 deriveJSON' ''Message
 
+data FlagsEvent =
+  FlagsEvent
+    { msgId  :: Word32
+    , flags  :: MessageFlags
+    , peerId :: Int32
+    } deriving (Show, Generic)
+
+deriveJSON' ''FlagsEvent
+
 data Event
   = EventNewMessage Message
   | EventMessageEdit Message
   | EventMessageChange Message
+  | EventMessageFlagsSet FlagsEvent
   | EventUnknown
+  | EventError Int
   deriving (Show, Generic, ToJSON)
 
+instance FromJSON Event where
+  parseJSON v = pure $ parseEvent v  
   
 isNumber (Number _) = True
 isNumber _          = False
@@ -45,8 +60,9 @@ parseEvent :: Value -> Event
 parseEvent (Array arr) = let
   eventId = Vec.head arr
   in if not (isNumber eventId)
-    then EventUnknown
+    then EventError $ unwrapNum eventId
     else case unwrapNum eventId of
+      2  -> EventMessageFlagsSet $ parseMessageFlagsSet arr
       4  -> EventNewMessage $ parseMessage arr
       5  -> EventMessageEdit $ parseMessage arr
       18 -> EventMessageChange $ parseMessage arr
@@ -65,5 +81,9 @@ parseMessage arr =
     , editTime              = unwrapNum  $ arr Vec.! 10
     }
 
-instance FromJSON Event where
-  parseJSON v = pure $ parseEvent v
+parseMessageFlagsSet arr = 
+  FlagsEvent
+    { msgId = unwrapNum $ arr Vec.! 1
+    , flags = MessageFlags $ unwrapNum $ arr Vec.! 2
+    , peerId = unwrapNum $ arr Vec.! 3
+    }
