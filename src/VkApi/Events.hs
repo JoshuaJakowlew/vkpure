@@ -14,8 +14,8 @@ import VkApi.MessageFlags
 import VkApi.Internal.Json
 import VkPure.Prelude
 
-data Message =
-  Message
+data MessageEvent =
+  MessageEvent
     { msgId                 :: Int
     , flags                 :: Word32
     , peerId                :: Int
@@ -26,22 +26,22 @@ data Message =
     , editTime              :: Int
     } deriving (Show, Generic)
 
-deriveJSON' ''Message
+deriveJSON' ''MessageEvent
 
-data FlagsEvent =
-  FlagsEvent
+data MessageFlagsEvent =
+  MessageFlagsEvent
     { msgId  :: Word32
     , flags  :: MessageFlags
     , peerId :: Int32
     } deriving (Show, Generic)
 
-deriveJSON' ''FlagsEvent
+deriveJSON' ''MessageFlagsEvent
 
 data Event
-  = EventNewMessage Message
-  | EventMessageEdit Message
-  | EventMessageChange Message
-  | EventMessageFlagsSet FlagsEvent
+  = EventNewMessage MessageEvent
+  | EventMessageEdit MessageEvent
+  | EventMessageChange MessageEvent
+  | EventMessageFlagsSet MessageFlagsEvent
   | EventUnknown
   | EventError Int
   deriving (Show, Generic, ToJSON)
@@ -70,7 +70,7 @@ parseEvent (Array arr) = let
 parseEvent _  = EventUnknown
 
 parseMessage arr =
-  Message
+  MessageEvent
     { msgId                 = unwrapNum  $ arr Vec.! 1
     , flags                 = unwrapNum  $ arr Vec.! 2
     , peerId                = unwrapNum  $ arr Vec.! 3
@@ -82,7 +82,7 @@ parseMessage arr =
     }
 
 parseMessageFlagsSet arr = 
-  FlagsEvent
+  MessageFlagsEvent
     { msgId = unwrapNum $ arr Vec.! 1
     , flags = MessageFlags $ unwrapNum $ arr Vec.! 2
     , peerId = unwrapNum $ arr Vec.! 3
