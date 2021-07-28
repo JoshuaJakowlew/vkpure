@@ -5,8 +5,9 @@ module VkApi.Events.Parsing where
 import Data.Aeson
 import Data.Aeson.Types
 import qualified Data.Vector as Vec
-import VkPure.Prelude
 import Control.Category
+
+import VkPure.Prelude
 
 
 withArrayBy

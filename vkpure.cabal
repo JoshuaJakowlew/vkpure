@@ -33,6 +33,7 @@ library
       VkApi.Events.MessageFlagsSet
       VkApi.Events.MessageFlagsUnset
       VkApi.Events.Parsing
+      VkApi.Events.UnreadMessagesCount
       VkApi.Internal.Json
       VkApi.Internal.Named
       VkApi.LongPoll

@@ -2,7 +2,6 @@
 
 module VkApi.Events.MessageFlagsSet where
 
-import GHC.Generics
 import Data.Aeson
 
 import VkApi.Events.MessageFlags

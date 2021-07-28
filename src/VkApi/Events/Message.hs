@@ -2,7 +2,6 @@
 
 module VkApi.Events.Message where
 
-import GHC.Generics
 import Data.Aeson
 import Data.Text
 
