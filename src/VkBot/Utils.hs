@@ -22,8 +22,8 @@ unwrap = ExceptT . fmap fromResponse
 
 fromResponse :: FromJSON a => Either ClientError a -> Either ErrorType a
 fromResponse (Right x) = Right x
-fromResponse (Left (FailureResponse _ r)) = fromMaybe "No" $ decode $ r ^. #responseBody
-fromResponse _ = Left "no"
+fromResponse (Left (FailureResponse _ r)) = fromMaybe "Cannot decode JSON" $ decode $ r ^. #responseBody
+fromResponse _ = Left "Low level request error"
 
 runQuery :: String -> String -> ClientM a -> IO (Either ClientError a)
 runQuery urlHost urlPath query  = do

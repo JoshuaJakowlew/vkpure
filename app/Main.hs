@@ -25,7 +25,7 @@ import VkBot.Auth
 import qualified VkBot.LongPoll as LP
 
 user :: UserCredentials
-user = UserCredentials "89156343277" "Vha8124s"
+user = UserCredentials "+79067440656" "SteammerHo"
 
 either' :: Show e => IO (Either e a) -> IO ()
 either' v = v >>= \case

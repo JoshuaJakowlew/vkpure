@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module VkApi.Events where
 
@@ -14,76 +15,74 @@ import VkApi.MessageFlags
 import VkApi.Internal.Json
 import VkPure.Prelude
 
+data MessageFlagsUnsetEvent
+  = MessageFlagsUnsetEventFlags MessageFlagsSetEvent
+  | MessageFlagsUnsetEventMessage MessageEvent
+  deriving (Show, Generic)
+
+data MessageFlagsSetEvent =
+  MessageFlagsEvent
+    { msgId  :: Word32
+    , flags  :: MessageFlags
+    , peerId :: Int32
+    } deriving (Show, Generic, ToJSON)
+
+instance FromJSON MessageFlagsSetEvent where
+  parseJSON = withArray "MessageFlagsSetEvent" $ \arr -> 
+    if Vec.length arr > 4 
+      then fail "MessageFlagsSetEvent: out of bounds"
+      else do
+        msgId  <- parseJSON $ arr Vec.! 1
+        flags  <- parseJSON $ arr Vec.! 2
+        peerId <- parseJSON $ arr Vec.! 3
+        pure MessageFlagsEvent{..}
+
 data MessageEvent =
   MessageEvent
     { msgId                 :: Int
-    , flags                 :: Word32
+    , flags                 :: MessageFlags
     , peerId                :: Int
     , timestamp             :: Int
     , text                  :: Text
     , randomId              :: Int
     , conversationMessageId :: Int
     , editTime              :: Int
-    } deriving (Show, Generic)
+    } deriving (Show, Generic, ToJSON)
 
-deriveJSON' ''MessageEvent
+instance FromJSON MessageEvent where
+  parseJSON = withArray "MessageEvent" $ \arr ->
+    if Vec.length arr > 11
+      then fail "MessageEvent: out of bounds"
+      else do
+        msgId                 <- parseJSON $ arr Vec.! 1
+        flags                 <- parseJSON $ arr Vec.! 2
+        peerId                <- parseJSON $ arr Vec.! 3
+        timestamp             <- parseJSON $ arr Vec.! 4
+        text                  <- parseJSON $ arr Vec.! 5
+        randomId              <- parseJSON $ arr Vec.! 8
+        conversationMessageId <- parseJSON $ arr Vec.! 9
+        editTime              <- parseJSON $ arr Vec.! 10
+        pure MessageEvent{..}
 
-data MessageFlagsEvent =
-  MessageFlagsEvent
-    { msgId  :: Word32
-    , flags  :: MessageFlags
-    , peerId :: Int32
-    } deriving (Show, Generic)
-
-deriveJSON' ''MessageFlagsEvent
+deriveJSON' ''MessageFlagsUnsetEvent
 
 data Event
-  = EventNewMessage MessageEvent
+  = EventMessageFlagsSet MessageFlagsSetEvent
+  | EventMessageFlagsUnset MessageFlagsUnsetEvent
+  | EventNewMessage MessageEvent
   | EventMessageEdit MessageEvent
   | EventMessageChange MessageEvent
-  | EventMessageFlagsSet MessageFlagsEvent
-  | EventUnknown
-  | EventError Int
+  | EventUnknown Word32
   deriving (Show, Generic, ToJSON)
 
 instance FromJSON Event where
-  parseJSON v = pure $ parseEvent v  
+  parseJSON = withArray "Event" $ \arr -> do
+    eventId <- parseJSON $ Vec.head arr
+    case eventId of
+      2  -> fmap EventMessageFlagsSet   . parseJSON . Array $ arr
+      3  -> fmap EventMessageFlagsUnset . parseJSON . Array $ arr
+      4  -> fmap EventNewMessage        . parseJSON . Array $ arr
+      5  -> fmap EventMessageEdit       . parseJSON . Array $ arr
+      18 -> fmap EventMessageChange     . parseJSON . Array $ arr
+      _ -> pure $ EventUnknown eventId
   
-isNumber (Number _) = True
-isNumber _          = False
-
-unwrapNum (Number x) = round x
-
-unwrapText (String t) = t
-
-parseEvent :: Value -> Event
-parseEvent (Array arr) = let
-  eventId = Vec.head arr
-  in if not (isNumber eventId)
-    then EventError $ unwrapNum eventId
-    else case unwrapNum eventId of
-      2  -> EventMessageFlagsSet $ parseMessageFlagsSet arr
-      4  -> EventNewMessage $ parseMessage arr
-      5  -> EventMessageEdit $ parseMessage arr
-      18 -> EventMessageChange $ parseMessage arr
-      _  -> EventUnknown
-parseEvent _  = EventUnknown
-
-parseMessage arr =
-  MessageEvent
-    { msgId                 = unwrapNum  $ arr Vec.! 1
-    , flags                 = unwrapNum  $ arr Vec.! 2
-    , peerId                = unwrapNum  $ arr Vec.! 3
-    , timestamp             = unwrapNum  $ arr Vec.! 4
-    , text                  = unwrapText $ arr Vec.! 5
-    , randomId              = unwrapNum  $ arr Vec.! 8
-    , conversationMessageId = unwrapNum  $ arr Vec.! 9
-    , editTime              = unwrapNum  $ arr Vec.! 10
-    }
-
-parseMessageFlagsSet arr = 
-  MessageFlagsEvent
-    { msgId = unwrapNum $ arr Vec.! 1
-    , flags = MessageFlags $ unwrapNum $ arr Vec.! 2
-    , peerId = unwrapNum $ arr Vec.! 3
-    }
