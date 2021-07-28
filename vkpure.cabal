@@ -28,10 +28,14 @@ library
       VkApi
       VkApi.Auth
       VkApi.Events
+      VkApi.Events.Message
+      VkApi.Events.MessageFlags
+      VkApi.Events.MessageFlagsSet
+      VkApi.Events.MessageFlagsUnset
+      VkApi.Events.Parsing
       VkApi.Internal.Json
       VkApi.Internal.Named
       VkApi.LongPoll
-      VkApi.MessageFlags
       VkApi.Messages
       VkApi.Types
       VkBot.Auth
@@ -54,6 +58,7 @@ library
       DeriveFunctor
       DeriveTraversable
       DerivingStrategies
+      DeriveAnyClass
       DerivingVia
       DuplicateRecordFields
       EmptyCase
@@ -125,6 +130,7 @@ executable vkpure-exe
       DeriveFunctor
       DeriveTraversable
       DerivingStrategies
+      DeriveAnyClass
       DerivingVia
       DuplicateRecordFields
       EmptyCase
@@ -198,6 +204,7 @@ test-suite vkpure-test
       DeriveFunctor
       DeriveTraversable
       DerivingStrategies
+      DeriveAnyClass
       DerivingVia
       DuplicateRecordFields
       EmptyCase

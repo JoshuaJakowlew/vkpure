@@ -1,8 +1,6 @@
-module VkApi.MessageFlags where
+module VkApi.Events.MessageFlags where
 
 import Data.Bits (testBit, setBit)
-import GHC.Generics (Generic)
-import Data.Word (Word32)
 import GHC.Prim (coerce)
 
 import VkPure.Prelude

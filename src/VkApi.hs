@@ -30,10 +30,12 @@ import VkPure.Prelude
 type RequiredQueryParam = QueryParam' '[Required, Strict]
 
 newtype Token      = Token Text
-  deriving (Show, Generic, ToJSON, FromJSON, ToHttpApiData)
+  deriving (Show, Generic)
+  deriving newtype (ToJSON, FromJSON, ToHttpApiData)
 
 newtype ApiVersion = ApiVersion Text
-  deriving (Show, Generic, ToJSON, FromJSON, ToHttpApiData)
+  deriving (Show, Generic)
+  deriving newtype (ToJSON, FromJSON, ToHttpApiData)
 
 type Api 
   =  RequiredQueryParam "access_token" Token

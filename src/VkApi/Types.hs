@@ -3,7 +3,6 @@
 
 module VkApi.Types where
 
-import Data.Text
 import GHC.Generics
 
 import VkApi.Internal.Json

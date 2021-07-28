@@ -5,7 +5,6 @@ import GHC.Generics
 import Servant.API
 import Servant.Client
 import Data.Text
-import Data.Aeson
 import Named
 
 import VkApi.Internal.Json
