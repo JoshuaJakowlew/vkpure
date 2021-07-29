@@ -9,7 +9,7 @@ import VkPure.Prelude
 
 
 deriveJSON' :: Name -> Q [Dec]
-deriveJSON' name = deriveJSON (jsonOptions) name
+deriveJSON' = deriveJSON jsonOptions
 
 jsonOptions ::  Options
 jsonOptions  = defaultOptions

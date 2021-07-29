@@ -11,21 +11,26 @@
 {-# LANGUAGE RecordWildCards #-}
 
 module Main where
-  
+
 import Control.Monad.Trans.Except
 import Control.Monad
 import Control.Monad.IO.Class (liftIO)
 import Servant.Client
 import Servant.Client.Generic
+import Data.Coerce (coerce)
 
-import VkPure.Prelude 
-import VkApi
+import VkApi.Core qualified as Core
+import VkApi.Types
+import VkApi.Auth qualified
+import VkApi.Messages qualified as Messages
+import VkApi.LongPoll qualified 
+import VkPure.Prelude
 import VkBot.Utils
-import VkBot.Auth
-import qualified VkBot.LongPoll as LP
+import VkBot.Auth qualified as Auth
+import VkBot.LongPoll qualified as LongPoll
 
-user :: UserCredentials
-user = UserCredentials "+79067440656" "SteammerHo"
+user :: Auth.UserCredentials
+user = Auth.UserCredentials "+79067440656" "SteammerHo"
 
 either' :: Show e => IO (Either e a) -> IO ()
 either' v = v >>= \case
@@ -37,29 +42,29 @@ main = either' . runExceptT $ do
   auth user >>= longPollServer >>= longPollLoop print
 
 -- // TODO: Use pts param => update types
-longPollLoop :: (LongPollSuccess -> IO ()) -> GetLongPollServerResponse -> ExceptT ErrorType IO ()
+longPollLoop :: (VkApi.LongPoll.Success -> IO ()) -> Messages.LongPollServer -> ExceptT ErrorType IO ()
 longPollLoop action server = do
   lpResponse <- longPollUpdates server
-  
+
   liftIO $ action lpResponse
 
   let server' = server & #ts .~ (lpResponse ^. #ts)
   longPollLoop action server'
-  
-longPollUpdates :: GetLongPollServerResponse -> ExceptT ErrorType IO LongPollSuccess
-longPollUpdates s = (LP.getLongPollUpdates s) >>= \case
-    LongPollResponseSuccess(e) -> pure e
+
+longPollUpdates :: Messages.LongPollServer -> ExceptT ErrorType IO VkApi.LongPoll.Success
+longPollUpdates s = LongPoll.updates s >>= \case
+    VkApi.LongPoll.ResponseSuccess e -> pure e
     _ -> throwE "Can't get updates"
 
-longPollServer :: Methods (AsClientT ClientM) -> ExceptT ErrorType IO GetLongPollServerResponse
+longPollServer :: Core.Methods (AsClientT ClientM) -> ExceptT ErrorType IO Messages.LongPollServer
 longPollServer vk =
-  (LP.longPollServer vk) >>= \case
-    VkSuccessResponse(VkSuccess s) -> pure s
+  LongPoll.server vk >>= \case
+    VkSuccessResponse s -> pure . coerce $ s
     _ -> throwE "Can't get long poll server"
 
-auth :: UserCredentials -> ExceptT ErrorType IO (Methods (AsClientT ClientM))
+auth :: Auth.UserCredentials -> ExceptT ErrorType IO (Core.Methods (AsClientT ClientM))
 auth user =
-  (unwrap $ runLogPassAuth user) >>= \case
-    LogPassAuthPass(AuthPass{..}) -> pure $ api $ Token accessToken
+  unwrap (Auth.run user) >>= \case
+    VkApi.Auth.ResponseSuccess VkApi.Auth.Success{..} -> pure $ Core.methods $ Core.Token accessToken
     _ -> throwE "Auth error"
 

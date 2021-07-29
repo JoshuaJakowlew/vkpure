@@ -1,5 +1,5 @@
 {-# LANGUAGE RecordWildCards #-}
-
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
 module VkApi.Events.Parsing where
 
 import Data.Aeson
@@ -29,4 +29,5 @@ withArrayByLength
   -> Parser a
 withArrayByLength name pred = withArrayBy name (Vec.length >>> pred)
 
+parseWithIndex :: FromJSON a => Vec.Vector Value -> Int -> Parser a
 parseWithIndex arr i = parseJSON $ arr Vec.! i

@@ -1,6 +1,6 @@
 module VkBot.LongPoll
-  ( getLongPollUpdates
-  , longPollServer
+  ( updates
+  , server
   ) where
 
 import Data.Aeson
@@ -10,26 +10,29 @@ import Servant.Client
 import Servant.Client.Generic
 import Named
 
-import VkApi
+import VkApi.LongPoll qualified as LongPoll
+import VkApi.Types
+import VkApi.Messages qualified as Messages
+import VkApi.Core
 import VkBot.Utils
 import VkPure.Prelude
 
-longPollServer :: Methods (AsClientT ClientM) -> ExceptT ErrorType IO (VkApiResponse GetLongPollServerResponse Value)
-longPollServer vk = unwrap . runMethod $ (vk ^. #getLongPollServer)
-                                       !  param #lpVersion 10
-                                       !  param #needPts   0
-                                       !? param #groupId   Nothing
+server :: Methods (AsClientT ClientM) -> ExceptT ErrorType IO (VkApiResponse Messages.LongPollServer Value)
+server vk = unwrap . runMethod $ (vk ^. #getLongPollServer)
+                               !  param #lpVersion 10
+                               !  param #needPts   0
+                               !? param #groupId   Nothing
 
-getLongPollUpdates :: GetLongPollServerResponse -> ExceptT ErrorType IO LongPollResponse
-getLongPollUpdates s = unwrap . runLongPoll s $ longPollRequest
-                                              ! param #version 10
-                                              ! param #mode    234
-                                              ! param #act     "a_check" --magic constant
-                                              ! param #key     (s ^. #key)
-                                              ! param #wait    10
-                                              ! param #ts      (s ^. #ts)
-
-runLongPoll :: GetLongPollServerResponse -> ClientM a -> IO (Either ClientError a)
-runLongPoll s = runQuery urlHost urlPath 
+updates :: Messages.LongPollServer -> ExceptT ErrorType IO LongPoll.Response
+updates s = unwrap . run s $ LongPoll.call
+                           ! param #version 10
+                           ! param #mode    234
+                           ! param #act     "a_check" --magic constant
+                           ! param #key     (s ^. #key)
+                           ! param #wait    10
+                           ! param #ts      (s ^. #ts)
+                          
+run :: Messages.LongPollServer -> ClientM a -> IO (Either ClientError a)
+run lpServer = runQuery urlHost urlPath 
   where
-    [urlHost, urlPath] = unpack <$> splitOn "/" (s ^. #server)
+    [urlHost, urlPath] = unpack <$> splitOn "/" (lpServer ^. #server)

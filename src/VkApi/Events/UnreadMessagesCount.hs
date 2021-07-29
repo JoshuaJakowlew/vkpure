@@ -4,7 +4,6 @@ module VkApi.Events.UnreadMessagesCount where
 
 import Data.Aeson
 
-import VkApi.Events.MessageFlags
 import VkApi.Events.Parsing
 import VkPure.Prelude
 

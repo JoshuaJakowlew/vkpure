@@ -3,7 +3,7 @@ module VkApi.LongPoll where
 
 import GHC.Generics
 import Servant.API
-import Servant.Client
+import Servant.Client hiding (Response)
 import Data.Text
 import Named
 
@@ -12,43 +12,43 @@ import VkApi.Internal.Named
 import VkApi.Events
 import VkPure.Prelude
 
-data LongPollSuccess = LongPollSuccess
+data Success = Success
   { ts      :: Int
   , pts     :: Int
   , updates :: [Event]
   } deriving (Show, Generic)
 
-data LongPollError = LongPollError 
+data Error = Error
   { failed     :: Int
   , ts         :: Maybe Int
   , minVersion :: Maybe Int
   , maxVersion :: Maybe Int
   } deriving (Show, Generic)
 
-data LongPollResponse
-  = LongPollResponseSuccess LongPollSuccess
-  | LongPollResponseError   LongPollError
+data Response
+  = ResponseSuccess Success
+  | ResponseError   Error
   deriving (Show, Generic)
 
-deriveJSON' ''LongPollSuccess
-deriveJSON' ''LongPollError
-deriveJSON' ''LongPollResponse
+deriveJSON' ''Success
+deriveJSON' ''Error
+deriveJSON' ''Response
 
-type LongPollRequestApi = 
+type LongPollRequestApi =
      RequiredNamedParam "version" "version" Int
   :> RequiredNamedParam "mode"    "mode"    Int
   :> RequiredNamedParam "act"     "act"     Text
   :> RequiredNamedParam "key"     "key"     Text
   :> RequiredNamedParam "wait"    "wait"    Int
   :> RequiredNamedParam "ts"      "ts"      Int
-  :> Get '[JSON] (LongPollResponse)
+  :> Get '[JSON] Response
 
-longPollRequest ::
-  "version" :! Int 
-  -> "mode" :! Int 
-  -> "act"  :! Text 
+call ::
+  "version" :! Int
+  -> "mode" :! Int
+  -> "act"  :! Text
   -> "key"  :! Text
-  -> "wait" :! Int 
+  -> "wait" :! Int
   -> "ts"   :! Int
-  -> ClientM LongPollResponse
-longPollRequest = client (Proxy @LongPollRequestApi)
+  -> ClientM Response
+call = client (Proxy @LongPollRequestApi)

@@ -9,6 +9,7 @@
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TypeOperators #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
 
 module VkApi.Internal.Named where
 
@@ -26,7 +27,8 @@ type OptionalNamedParam name path ty = NQueryParam' [Optional, Strict] name path
 
 deriving newtype instance ToHttpApiData a => ToHttpApiData (name :! a)
 
-(!?):: forall a name b. (Maybe (NamedF Identity a name) -> b) -> Param ( name :! (Maybe a)) -> b
+(!?):: forall a name b. (Maybe (NamedF Identity a name) -> b) -> Param ( name :! Maybe a) -> b
 fn !? (Param (Arg x)) = fn $ (Arg @_ @name) <$> x
 
 infixl 9 !?
+

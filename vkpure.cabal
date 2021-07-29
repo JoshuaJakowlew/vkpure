@@ -25,8 +25,8 @@ source-repository head
 
 library
   exposed-modules:
-      VkApi
       VkApi.Auth
+      VkApi.Core
       VkApi.Events
       VkApi.Events.Message
       VkApi.Events.MessageFlags

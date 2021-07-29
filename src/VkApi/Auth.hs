@@ -6,33 +6,33 @@ import Data.Proxy
 import Data.Text
 import GHC.Generics
 import Servant.API
-import Servant.Client
+import Servant.Client hiding (Response)
 import Named
 
 import VkApi.Internal.Json
 import VkApi.Internal.Named
 import VkPure.Prelude 
 
-data AuthPass = AuthPass
+data Success = Success
   { accessToken :: Text
   , expiresIn   :: Int
   , userId      :: Int
   } deriving (Show, Generic)
 
-data AuthError = AuthError
+data Error = Error
   {  error            :: Text
   ,  errorDescription :: Text 
   ,  errorType        :: Text 
   } deriving (Show, Generic)
 
-data LogPassAuthResponse 
-  = LogPassAuthPass  AuthPass
-  | LogPassAuthError AuthError
+data Response 
+  = ResponseSuccess Success
+  | ResponseError   Error
   deriving (Show, Generic)
 
-deriveJSON' ''AuthPass
-deriveJSON' ''AuthError
-deriveJSON' ''LogPassAuthResponse
+deriveJSON' ''Success
+deriveJSON' ''Error
+deriveJSON' ''Response
 
 type LogPassAuthApi   = "token"
   :> RequiredNamedParam "username"       "username"      Text
@@ -42,16 +42,16 @@ type LogPassAuthApi   = "token"
   :> RequiredNamedParam "clientId"       "client_id"     Int
   :> RequiredNamedParam "clientSecret"   "client_secret" Text
   :> RequiredNamedParam "twofaSupported" "2fa_supported" Int
-  :> Get '[JSON] LogPassAuthResponse
+  :> Get '[JSON] Response
 
-getLogPassAuth 
+logPassAuth 
   :: "username"       :! Text
   -> "password"       :! Text
   -> "grantType"      :! Text
   -> "scope"          :! Text
   -> "clientId"       :! Int 
   -> "clientSecret"   :! Text
-  -> "twofaSupported" :! Int 
-  -> ClientM LogPassAuthResponse
-getLogPassAuth = client (Proxy @LogPassAuthApi)
+  -> "twofaSupported" :! Int
+  -> ClientM Response
+logPassAuth = client (Proxy @LogPassAuthApi)
 
