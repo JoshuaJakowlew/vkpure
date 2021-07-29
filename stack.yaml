@@ -6,8 +6,6 @@ packages:
 extra-deps:
 - servant-multipart-client-0.12.1@sha256:d043063e2f33eab86840f87c4bdb16eb3fe4a5847a0b118e4f4265cf3ba4c9b3,1892
 - servant-client-0.18.3@sha256:570145df5209b245a141eec6841fbca6785cd88e073e85eecbeff4438ca34784,4602
-- servant-client-namedargs-0.1.1.1@sha256:5d634477b005893f77d134d37753492430d80e323a59873e9e00f9da636d180f,1809
-- servant-namedargs-0.1.1.1@sha256:7e7705cd90243e41be10ce1dbdb9ac0aaf52875f97554f7134e4f6e0c6701d7c,1259
 
 - git: https://github.com/kcsongor/generic-lens.git
   commit: 8e1fc7dcf444332c474fca17110d4bc554db08c8

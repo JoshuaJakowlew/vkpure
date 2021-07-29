@@ -4,13 +4,16 @@
 module VkApi.Events where
 
 import Data.Aeson
-import qualified Data.Vector as Vec
+import Data.Vector qualified as Vec
 
-import qualified VkApi.Events.Message as Message
-import qualified VkApi.Events.MessageFlagsSet as MessageFlagsSet
-import qualified VkApi.Events.MessageFlagsUnset as MessageFlagsUnset
-import qualified VkApi.Events.UnreadMessagesCount as UnreadMessagesCount
+import VkApi.Events.Message             qualified as Message
+import VkApi.Events.MessageFlagsSet     qualified as MessageFlagsSet
+import VkApi.Events.MessageFlagsUnset   qualified as MessageFlagsUnset
+import VkApi.Events.UnreadMessagesCount qualified as UnreadMessagesCount
+import VkApi.Events.Parsing
 import VkPure.Prelude
+
+
 
 data Event
   = MessageFlagsSet      MessageFlagsSet.Event
@@ -24,7 +27,7 @@ data Event
   deriving (Show, Generic, ToJSON)
 
 instance FromJSON Event where
- parseJSON = withArray "Event" $ \arr -> do
+ parseJSON = withArrayByLength "Event" (> 0) $ \arr -> do
    eventId <- parseJSON $ Vec.head arr
    case eventId of
      2  -> parseEvent MessageFlagsSet      arr

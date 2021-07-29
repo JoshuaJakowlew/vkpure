@@ -19,20 +19,6 @@ packages:
   original:
     hackage: servant-client-0.18.3@sha256:570145df5209b245a141eec6841fbca6785cd88e073e85eecbeff4438ca34784,4602
 - completed:
-    hackage: servant-client-namedargs-0.1.1.1@sha256:5d634477b005893f77d134d37753492430d80e323a59873e9e00f9da636d180f,1809
-    pantry-tree:
-      size: 366
-      sha256: 256369572fa648da29e778cfb86e3b3fc578c58fffd341d474019c0514cd24d9
-  original:
-    hackage: servant-client-namedargs-0.1.1.1@sha256:5d634477b005893f77d134d37753492430d80e323a59873e9e00f9da636d180f,1809
-- completed:
-    hackage: servant-namedargs-0.1.1.1@sha256:7e7705cd90243e41be10ce1dbdb9ac0aaf52875f97554f7134e4f6e0c6701d7c,1259
-    pantry-tree:
-      size: 349
-      sha256: 79a120788184e294a68977f942a32844a196487b30f0e6ba46a1ba92a3084841
-  original:
-    hackage: servant-namedargs-0.1.1.1@sha256:7e7705cd90243e41be10ce1dbdb9ac0aaf52875f97554f7134e4f6e0c6701d7c,1259
-- completed:
     subdir: generic-lens-core
     name: generic-lens-core
     version: 2.1.0.0

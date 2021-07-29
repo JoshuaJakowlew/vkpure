@@ -4,8 +4,8 @@ module VkApi.Events.MessageFlagsUnset where
 
 import VkApi.Internal.Json
 import VkPure.Prelude
-import qualified VkApi.Events.Message as Message
-import qualified VkApi.Events.MessageFlagsSet as MessageFlagsSet
+import VkApi.Events.Message         qualified as Message
+import VkApi.Events.MessageFlagsSet qualified as MessageFlagsSet
 
 data Event
   = Flags MessageFlagsSet.Event

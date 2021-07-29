@@ -4,7 +4,7 @@ module VkApi.Events.Parsing where
 
 import Data.Aeson
 import Data.Aeson.Types
-import qualified Data.Vector as Vec
+import Data.Vector qualified as Vec
 import Control.Category
 
 import VkPure.Prelude
