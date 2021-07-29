@@ -11,12 +11,14 @@ import VkApi.Internal.Json
 import VkApi.Internal.Named
 import VkApi.Events
 import VkPure.Prelude
+import Data.Aeson
 
 data Success = Success
   { ts      :: Int
   , pts     :: Int
   , updates :: [Event]
   } deriving (Show, Generic)
+  deriving (FromJSON, ToJSON) via CamelToSnake Success
 
 data Error = Error
   { failed     :: Int
@@ -24,15 +26,15 @@ data Error = Error
   , minVersion :: Maybe Int
   , maxVersion :: Maybe Int
   } deriving (Show, Generic)
+  deriving (FromJSON, ToJSON) via CamelToSnake Error
 
 data Response
   = ResponseSuccess Success
   | ResponseError   Error
   deriving (Show, Generic)
+  deriving (FromJSON, ToJSON) via CamelToSnake Response
 
-deriveJSON' ''Success
-deriveJSON' ''Error
-deriveJSON' ''Response
+
 
 type LongPollRequestApi =
      RequiredNamedParam "version" "version" Int

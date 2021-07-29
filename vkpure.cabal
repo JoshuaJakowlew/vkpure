@@ -28,6 +28,7 @@ library
       VkApi
       VkApi.Auth
       VkApi.Events
+      VkApi.Events.FriendOnline
       VkApi.Events.Message
       VkApi.Events.MessageFlags
       VkApi.Events.MessageFlagsSet
@@ -100,6 +101,7 @@ library
     , http-client-tls
     , lens
     , named
+    , scientific
     , servant
     , servant-client
     , servant-client-core
@@ -172,6 +174,7 @@ executable vkpure-exe
     , http-client-tls
     , lens
     , named
+    , scientific
     , servant
     , servant-client
     , servant-client-core
@@ -246,6 +249,7 @@ test-suite vkpure-test
     , http-client-tls
     , lens
     , named
+    , scientific
     , servant
     , servant-client
     , servant-client-core

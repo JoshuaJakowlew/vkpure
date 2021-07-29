@@ -4,11 +4,13 @@ import Data.Bits (testBit, setBit)
 
 import VkPure.Prelude
 import VkApi.Internal.Json
+import Data.Aeson
 
 newtype MessageFlags = MessageFlags Word32
   deriving (Show, Generic)
+  deriving (FromJSON, ToJSON) via CamelToSnake MessageFlags
 
-deriveJSON' ''MessageFlags
+
 
 -- is-functions
 

@@ -12,27 +12,28 @@ import Named
 import VkApi.Internal.Json
 import VkApi.Internal.Named
 import VkPure.Prelude 
+import Data.Aeson
 
 data Success = Success
   { accessToken :: Text
   , expiresIn   :: Int
   , userId      :: Int
   } deriving (Show, Generic)
+  deriving (FromJSON, ToJSON) via CamelToSnake Success
 
 data Error = Error
   {  error            :: Text
   ,  errorDescription :: Text 
   ,  errorType        :: Text 
   } deriving (Show, Generic)
+  deriving (FromJSON, ToJSON) via CamelToSnake Error
 
 data Response 
   = ResponseSuccess Success
   | ResponseError   Error
   deriving (Show, Generic)
+  deriving (FromJSON, ToJSON) via CamelToSnake Response
 
-deriveJSON' ''Success
-deriveJSON' ''Error
-deriveJSON' ''Response
 
 type LogPassAuthApi   = "token"
   :> RequiredNamedParam "username"       "username"      Text

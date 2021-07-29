@@ -15,8 +15,9 @@ data LongPollServer = LongPollServer
   , server :: Text
   , ts     :: Int
   } deriving (Show, Generic)
+  deriving (FromJSON, ToJSON) via CamelToSnake LongPollServer
 
-deriveJSON' ''LongPollServer
+
 
 type VkMessagesApi = "messages.getLongPollServer"
   :> RequiredNamedParam "needPts"   "need_pts"   Int

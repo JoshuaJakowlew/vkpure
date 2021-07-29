@@ -82,6 +82,7 @@ dependencies:
 - named
 - vector
 - ghc-prim
+- scientific
 
 library:
   source-dirs: src

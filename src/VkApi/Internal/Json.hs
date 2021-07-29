@@ -1,20 +1,26 @@
 module VkApi.Internal.Json where
 
 
-import Language.Haskell.TH
-import Data.Aeson.TH
+
+import Data.Aeson
 import Data.Char
 import Data.List
-import VkPure.Prelude 
+import VkPure.Prelude
+import GHC.Generics
+
+newtype CamelToSnake a = CamelToSnake { runWithOptions :: a }
 
 
-deriveJSON' :: Name -> Q [Dec]
-deriveJSON' = deriveJSON jsonOptions
+instance (Generic a, GToJSON Zero (Rep a)) => ToJSON (CamelToSnake a) where
+  toJSON  = genericToJSON @a jsonOptions . runWithOptions
+instance (Generic a, GFromJSON Zero (Rep a)) => FromJSON (CamelToSnake a) where
+  parseJSON = fmap CamelToSnake . genericParseJSON @a jsonOptions
+
 
 jsonOptions ::  Options
 jsonOptions  = defaultOptions
-  { fieldLabelModifier     = snakeFieldModifier 
-  , constructorTagModifier = snakeFieldModifier 
+  { fieldLabelModifier     = snakeFieldModifier
+  , constructorTagModifier = snakeFieldModifier
   , omitNothingFields      = True
   , sumEncoding            = UntaggedValue
   }
