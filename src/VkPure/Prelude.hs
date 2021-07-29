@@ -6,6 +6,7 @@ module VkPure.Prelude
   , module Data.Word
   , module Data.Int
   , Generic
+  , coerce
   ) where
 
 import Prelude 
@@ -15,3 +16,4 @@ import Data.Proxy
 import GHC.Generics (Generic)
 import Data.Word
 import Data.Int
+import Data.Coerce ( coerce )

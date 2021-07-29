@@ -13,7 +13,7 @@ import Named
 import VkApi.LongPoll qualified as LongPoll
 import VkApi.Types
 import VkApi.Messages qualified as Messages
-import VkApi.Core
+import VkApi
 import VkBot.Utils
 import VkPure.Prelude
 

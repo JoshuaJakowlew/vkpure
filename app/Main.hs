@@ -1,33 +1,24 @@
-{-# LANGUAGE BlockArguments #-}
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DerivingStrategies #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralisedNewtypeDeriving #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
 
 module Main where
 
-import Control.Monad.Trans.Except
-import Control.Monad
+import Control.Monad.Trans.Except ( runExceptT, throwE, ExceptT )
 import Control.Monad.IO.Class (liftIO)
-import Servant.Client
-import Servant.Client.Generic
-import Data.Coerce (coerce)
+import Servant.Client ( ClientM )
+import Servant.Client.Generic ( AsClientT )
 
-import VkApi.Core qualified as Core
-import VkApi.Types
-import VkApi.Auth qualified
+import VkApi          qualified 
+import VkApi.Auth     qualified
 import VkApi.Messages qualified as Messages
 import VkApi.LongPoll qualified 
-import VkPure.Prelude
-import VkBot.Utils
-import VkBot.Auth qualified as Auth
+import VkApi.Types ( VkApiResponse(VkSuccessResponse), VkApiSuccess(VkSuccess) )
+
+import VkBot.Utils ( unwrap, ErrorType )
+import VkBot.Auth     qualified as Auth
 import VkBot.LongPoll qualified as LongPoll
+
+import VkPure.Prelude
 
 user :: Auth.UserCredentials
 user = Auth.UserCredentials "+79067440656" "SteammerHo"
@@ -56,15 +47,15 @@ longPollUpdates s = LongPoll.updates s >>= \case
     VkApi.LongPoll.ResponseSuccess e -> pure e
     _ -> throwE "Can't get updates"
 
-longPollServer :: Core.Methods (AsClientT ClientM) -> ExceptT ErrorType IO Messages.LongPollServer
+longPollServer :: VkApi.Methods (AsClientT ClientM) -> ExceptT ErrorType IO Messages.LongPollServer
 longPollServer vk =
   LongPoll.server vk >>= \case
     VkSuccessResponse s -> pure . coerce $ s
     _ -> throwE "Can't get long poll server"
 
-auth :: Auth.UserCredentials -> ExceptT ErrorType IO (Core.Methods (AsClientT ClientM))
+auth :: Auth.UserCredentials -> ExceptT ErrorType IO (VkApi.Methods (AsClientT ClientM))
 auth user =
   unwrap (Auth.run user) >>= \case
-    VkApi.Auth.ResponseSuccess VkApi.Auth.Success{..} -> pure $ Core.methods $ Core.Token accessToken
+    VkApi.Auth.ResponseSuccess VkApi.Auth.Success{..} -> pure $ VkApi.methods $ VkApi.Token accessToken
     _ -> throwE "Auth error"
 

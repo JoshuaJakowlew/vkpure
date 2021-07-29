@@ -1,7 +1,6 @@
 module VkApi.Events.MessageFlags where
 
 import Data.Bits (testBit, setBit)
-import GHC.Prim (coerce)
 
 import VkPure.Prelude
 import VkApi.Internal.Json

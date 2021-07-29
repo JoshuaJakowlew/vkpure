@@ -1,4 +1,4 @@
-module VkApi.Core
+module VkApi
   ( Methods (..)
   , Token (..)
   , (!?)
@@ -23,13 +23,13 @@ newtype Token      = Token Text
   deriving (Show, Generic)
   deriving newtype (ToJSON, FromJSON, ToHttpApiData)
 
-newtype ApiVersion = ApiVersion Text
+newtype Version = Version Text
   deriving (Show, Generic)
   deriving newtype (ToJSON, FromJSON, ToHttpApiData)
 
 type Api
   =  RequiredQueryParam "access_token" Token
-  :> RequiredQueryParam "v" ApiVersion
+  :> RequiredQueryParam "v" Version
   :> ToServantApi Methods
 
 newtype Methods routes = Methods
@@ -38,4 +38,4 @@ newtype Methods routes = Methods
 
 
 methods :: Token -> Methods (AsClientT ClientM)
-methods token = fromServant $ client (Proxy @Api) token (ApiVersion "5.131")
+methods token = fromServant $ client (Proxy @Api) token (Version "5.131")
