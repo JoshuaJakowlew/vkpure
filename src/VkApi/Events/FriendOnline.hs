@@ -22,7 +22,7 @@ data Platform
   deriving anyclass ToJSON
 
 instance FromJSON Platform where
-  parseJSON = withScientific "Platform" $ \x -> do
+  parseJSON = withScientific "Platform"  $ \x -> do
     let platformId :: Word32 = fromJust . toBoundedInteger $ x
     case platformId of
       1 -> pure MobileVk
@@ -46,7 +46,7 @@ data Event =
     deriving anyclass ToJSON
 
 instance FromJSON Event where
-  parseJSON = withArray "FriendOnlineEvent" $ \arr -> do
+  parseJSON = withArrayByLength "FriendOnlineEvent" (>4) $ \arr -> do
     userId    <- negate <$> arr `parseWithIndex` 1
     platform  <-            arr `parseWithIndex` 2
     timestamp <-            arr `parseWithIndex` 3

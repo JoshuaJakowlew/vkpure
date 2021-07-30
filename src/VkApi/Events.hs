@@ -11,6 +11,7 @@ import VkApi.Events.MessageFlagsSet     qualified as MessageFlagsSet
 import VkApi.Events.MessageFlagsUnset   qualified as MessageFlagsUnset
 import VkApi.Events.UnreadMessagesCount qualified as UnreadMessagesCount
 import VkApi.Events.FriendOnline        qualified as Events.FriendOnline
+import VkApi.Events.FriendOffline       qualified as Events.FriendOffline
 import VkApi.Events.Parsing
 import VkPure.Prelude
 
@@ -25,6 +26,7 @@ data Event
   | UnreadInboxMessages  UnreadMessagesCount.Event
   | UnreadOutboxMessages UnreadMessagesCount.Event
   | FriendOnline         Events.FriendOnline.Event
+  | FriendOffline        Events.FriendOffline.Event
   | UnknownEvent Word32
   deriving (Show, Generic, ToJSON)
 
@@ -39,6 +41,7 @@ instance FromJSON Event where
      6  -> parseEvent UnreadInboxMessages  arr
      7  -> parseEvent UnreadOutboxMessages arr
      8  -> parseEvent FriendOnline         arr
+     9  -> parseEvent FriendOffline        arr
      18 -> parseEvent MessageChange        arr
      _  -> pure $ UnknownEvent eventId
     where
