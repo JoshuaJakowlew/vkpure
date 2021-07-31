@@ -2,10 +2,10 @@
 
 module VkApi.Events.MessageFlagsSet where
 
-import Data.Aeson
+import Data.Aeson ( FromJSON(parseJSON), ToJSON )
 
-import VkApi.Events.MessageFlags
-import VkApi.Events.Parsing
+import VkApi.Events.MessageFlags ( MessageFlags )
+import VkApi.Events.Parsing ( withArrayByLength, parseWithIndex )
 import VkPure.Prelude
 
 data Event =

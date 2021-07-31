@@ -2,10 +2,10 @@
 {-# OPTIONS_GHC -Wno-name-shadowing #-}
 module VkApi.Events.Parsing where
 
-import Data.Aeson
-import Data.Aeson.Types
+import Data.Aeson ( Array, FromJSON(parseJSON), Value, withArray )
+import Data.Aeson.Types ( Parser )
 import Data.Vector qualified as Vec
-import Control.Category
+import Control.Category ( (>>>) )
 
 import VkPure.Prelude
 

@@ -1,10 +1,10 @@
 module VkApi.Events.MessageFlags where
 
+import Data.Aeson ( FromJSON, ToJSON )
 import Data.Bits (testBit, setBit)
 
+import VkApi.Internal.Json ( CamelToSnake(CamelToSnake) )
 import VkPure.Prelude
-import VkApi.Internal.Json
-import Data.Aeson
 
 newtype MessageFlags = MessageFlags Word32
   deriving (Show, Generic)

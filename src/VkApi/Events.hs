@@ -3,7 +3,7 @@
 
 module VkApi.Events where
 
-import Data.Aeson
+import Data.Aeson ( FromJSON(parseJSON), Value(Array), ToJSON )
 import Data.Vector qualified as Vec
 
 import VkApi.Events.Message             qualified as Message
@@ -12,7 +12,7 @@ import VkApi.Events.MessageFlagsUnset   qualified as MessageFlagsUnset
 import VkApi.Events.UnreadMessagesCount qualified as UnreadMessagesCount
 import VkApi.Events.FriendOnline        qualified as Events.FriendOnline
 import VkApi.Events.FriendOffline       qualified as Events.FriendOffline
-import VkApi.Events.Parsing
+import VkApi.Events.Parsing ( withArrayByLength )
 import VkPure.Prelude
 
 

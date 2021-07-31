@@ -2,9 +2,9 @@
 
 module VkApi.Events.UnreadMessagesCount where
 
-import Data.Aeson
+import Data.Aeson ( FromJSON(parseJSON), ToJSON )
 
-import VkApi.Events.Parsing
+import VkApi.Events.Parsing ( withArrayByLength, parseWithIndex )
 import VkPure.Prelude
 
 

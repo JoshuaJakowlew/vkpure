@@ -2,11 +2,11 @@
 
 module VkApi.Events.FriendOnline where
 
-import Data.Aeson
-import Data.Scientific
-import Data.Maybe
+import Data.Aeson ( FromJSON(parseJSON), ToJSON, withScientific )
+import Data.Scientific ( toBoundedInteger )
+import Data.Maybe ( fromJust )
 
-import VkApi.Events.Parsing
+import VkApi.Events.Parsing ( withArrayByLength, parseWithIndex )
 import VkPure.Prelude
 
 data Platform
