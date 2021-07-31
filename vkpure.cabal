@@ -28,6 +28,7 @@ library
       VkApi
       VkApi.Auth
       VkApi.Events
+      VkApi.Events.ConversationFlags
       VkApi.Events.FriendOffline
       VkApi.Events.FriendOnline
       VkApi.Events.Message
