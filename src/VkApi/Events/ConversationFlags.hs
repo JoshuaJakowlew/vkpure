@@ -6,6 +6,12 @@ import Data.Bits (testBit, setBit)
 import VkApi.Internal.Json ( CamelToSnake(CamelToSnake) )
 import VkPure.Prelude
 
+data Event = Event
+  { peerId :: Int32
+  , flags  :: ConversationFlags
+  } deriving (Show, Generic)
+  deriving (FromJSON, ToJSON) via CamelToSnake Event
+
 newtype ConversationFlags = ConversationFlags Word32
   deriving (Show, Generic)
   deriving (FromJSON, ToJSON) via CamelToSnake ConversationFlags
