@@ -32,6 +32,7 @@ library
       VkApi.Events.ConversationFlags
       VkApi.Events.FriendOffline
       VkApi.Events.FriendOnline
+      VkApi.Events.MajorId
       VkApi.Events.Message
       VkApi.Events.MessageCacheReset
       VkApi.Events.MessageFlags

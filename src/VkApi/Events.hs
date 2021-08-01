@@ -37,6 +37,7 @@ data Event
   | UnknownEvent Word32
   deriving (Show, Generic, ToJSON)
 
+-- // TODO: Implement safe eventId parse
 instance FromJSON Event where
  parseJSON = withArrayByLength "Event" (> 0) $ \arr -> do
    eventId <- parseJSON $ Vec.head arr
