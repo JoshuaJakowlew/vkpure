@@ -14,6 +14,7 @@ import VkApi.Events.FriendOnline           qualified as FriendOnline
 import VkApi.Events.FriendOffline          qualified as FriendOffline
 import VkApi.Events.ConversationFlags      qualified as ConversationFlags
 import VkApi.Events.ConversationBulkDelete qualified as ConversationBulkDelete
+import VkApi.Events.MessageCacheReset      qualified as MessageCacheReset
 import VkApi.Events.Parsing ( withArrayByLength )
 import VkPure.Prelude
 
@@ -32,6 +33,7 @@ data Event
   | ConversationFlagsSet   ConversationFlags.Event
   | ConversationBulkDelete ConversationBulkDelete.Event
   | MessageChange          Message.Event
+  | MessageCacheReset      MessageCacheReset.Event
   | UnknownEvent Word32
   deriving (Show, Generic, ToJSON)
 
@@ -39,19 +41,19 @@ instance FromJSON Event where
  parseJSON = withArrayByLength "Event" (> 0) $ \arr -> do
    eventId <- parseJSON $ Vec.head arr
    case eventId of
-     2  -> parseEvent MessageFlagsSet        arr
-     3  -> parseEvent MessageFlagsUnset      arr
-     4  -> parseEvent NewMessage             arr
-     5  -> parseEvent MessageEdit            arr
-     6  -> parseEvent UnreadInboxMessages    arr
-     7  -> parseEvent UnreadOutboxMessages   arr
-     8  -> parseEvent FriendOnline           arr
-     9  -> parseEvent FriendOffline          arr
-     10 -> parseEvent ConversationFlagsUnset arr
-     12 -> parseEvent ConversationFlagsSet   arr
-     13 -> parseEvent ConversationBulkDelete arr
-     18 -> parseEvent MessageChange          arr
-
-     _  -> pure $ UnknownEvent eventId
+      2  -> parseEvent MessageFlagsSet        arr
+      3  -> parseEvent MessageFlagsUnset      arr
+      4  -> parseEvent NewMessage             arr
+      5  -> parseEvent MessageEdit            arr
+      6  -> parseEvent UnreadInboxMessages    arr
+      7  -> parseEvent UnreadOutboxMessages   arr
+      8  -> parseEvent FriendOnline           arr
+      9  -> parseEvent FriendOffline          arr
+      10 -> parseEvent ConversationFlagsUnset arr
+      12 -> parseEvent ConversationFlagsSet   arr
+      13 -> parseEvent ConversationBulkDelete arr
+      18 -> parseEvent MessageChange          arr
+      19 -> parseEvent MessageCacheReset      arr
+      _  -> pure $ UnknownEvent eventId
     where
       parseEvent e arr = fmap e . parseJSON . Array $ arr

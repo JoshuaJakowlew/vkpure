@@ -33,6 +33,7 @@ library
       VkApi.Events.FriendOffline
       VkApi.Events.FriendOnline
       VkApi.Events.Message
+      VkApi.Events.MessageCacheReset
       VkApi.Events.MessageFlags
       VkApi.Events.MessageFlagsSet
       VkApi.Events.MessageFlagsUnset

@@ -16,7 +16,7 @@ data Event = Event
   deriving (ToJSON) via CamelToSnake Event
 
 instance FromJSON Event where
-  parseJSON = withArrayByLength "ConversationBulkDeleteEvent" (>2) $ \arr -> do
+  parseJSON = withArrayByLength "ConversationFlagsEvent" (>2) $ \arr -> do
     peerId <-  arr `parseWithIndex` 1
     flags  <-  arr `parseWithIndex` 2
     pure Event{..}
