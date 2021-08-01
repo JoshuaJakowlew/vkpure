@@ -1,4 +1,5 @@
 {-# LANGUAGE RecordWildCards #-}
+
 module VkApi.Events.ConversationBulkDelete where
 
 import Data.Aeson ( FromJSON(parseJSON), ToJSON )

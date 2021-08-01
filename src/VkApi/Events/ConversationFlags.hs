@@ -1,16 +1,25 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module VkApi.Events.ConversationFlags where
 
-import Data.Aeson ( FromJSON, ToJSON )
+import Data.Aeson ( FromJSON(parseJSON), ToJSON )
 import Data.Bits (testBit, setBit)
 
 import VkApi.Internal.Json ( CamelToSnake(CamelToSnake) )
+import VkApi.Events.Parsing ( withArrayByLength, parseWithIndex )
 import VkPure.Prelude
 
 data Event = Event
   { peerId :: Int32
   , flags  :: ConversationFlags
   } deriving (Show, Generic)
-  deriving (FromJSON, ToJSON) via CamelToSnake Event
+  deriving (ToJSON) via CamelToSnake Event
+
+instance FromJSON Event where
+  parseJSON = withArrayByLength "ConversationBulkDeleteEvent" (>2) $ \arr -> do
+    peerId <-  arr `parseWithIndex` 1
+    flags  <-  arr `parseWithIndex` 2
+    pure Event{..}
 
 newtype ConversationFlags = ConversationFlags Word32
   deriving (Show, Generic)
