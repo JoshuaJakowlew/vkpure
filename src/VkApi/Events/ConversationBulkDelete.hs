@@ -14,7 +14,7 @@ data Event = Event
   deriving ToJSON via CamelToSnake Event
 
 instance FromJSON Event where
-  parseJSON = withArrayByLength "FriendOnlineEvent" (>2) $ \arr -> do
+  parseJSON = withArrayByLength "ConversationBulkDeleteEvent" (>2) $ \arr -> do
     peerId    <-  arr `parseWithIndex` 1
     lastMsgId <-  arr `parseWithIndex` 2
     pure Event{..}
