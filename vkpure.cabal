@@ -30,6 +30,7 @@ library
       VkApi.Events
       VkApi.Events.ConversationBulkDelete
       VkApi.Events.ConversationFlags
+      VkApi.Events.ConversationPin
       VkApi.Events.FriendOffline
       VkApi.Events.FriendOnline
       VkApi.Events.MajorId

@@ -15,6 +15,7 @@ import VkApi.Events.FriendOffline          qualified as FriendOffline
 import VkApi.Events.ConversationFlags      qualified as ConversationFlags
 import VkApi.Events.ConversationBulkDelete qualified as ConversationBulkDelete
 import VkApi.Events.MessageCacheReset      qualified as MessageCacheReset
+import VkApi.Events.ConversationPin        qualified as ConversationPin
 import VkApi.Events.Parsing ( withArrayByLength )
 import VkPure.Prelude
 
@@ -34,6 +35,7 @@ data Event
   | ConversationBulkDelete ConversationBulkDelete.Event
   | MessageChange          Message.Event
   | MessageCacheReset      MessageCacheReset.Event
+  | ConversationPin        ConversationPin.Event
   | UnknownEvent Word32
   deriving (Show, Generic, ToJSON)
 
@@ -55,6 +57,7 @@ instance FromJSON Event where
       13 -> parseEvent ConversationBulkDelete arr
       18 -> parseEvent MessageChange          arr
       19 -> parseEvent MessageCacheReset      arr
+      20 -> parseEvent ConversationPin        arr
       _  -> pure $ UnknownEvent eventId
     where
       parseEvent e arr = fmap e . parseJSON . Array $ arr
