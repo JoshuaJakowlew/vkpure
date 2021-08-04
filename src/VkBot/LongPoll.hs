@@ -17,13 +17,13 @@ import VkApi
 import VkBot.Utils
 import VkPure.Prelude
 
-server :: Methods (AsClientT ClientM) -> ExceptT ErrorType IO (VkApiResponse Messages.LongPollServer Value)
+server :: Methods ResponseM -> ApiError (VkApiResponse Messages.LongPollServer Value)
 server vk = unwrap . runMethod $ (vk ^. #getLongPollServer)
                                !  param #lpVersion 10
                                !  param #needPts   0
                                !? param #groupId   Nothing
 
-updates :: Messages.LongPollServer -> ExceptT ErrorType IO LongPoll.Response
+updates :: Messages.LongPollServer -> ApiError LongPoll.Response
 updates s = unwrap . run s $ LongPoll.call
                            ! param #version 10
                            ! param #mode    234

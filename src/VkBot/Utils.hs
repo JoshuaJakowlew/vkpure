@@ -2,6 +2,7 @@ module VkBot.Utils where
 
 
 import Data.Aeson
+import Servant.Client.Generic
 import Servant.Client
 import Network.HTTP.Client (newManager)
 import Network.HTTP.Client.TLS
@@ -33,4 +34,5 @@ runQuery urlHost urlPath query  = do
 runMethod :: ClientM a -> IO (Either ClientError a)
 runMethod = runQuery "api.vk.com" "method"
 
-
+type ApiError = ExceptT ErrorType IO
+type ResponseM = AsClientT ClientM

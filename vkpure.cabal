@@ -107,6 +107,7 @@ library
     , http-client-tls
     , lens
     , named
+    , pretty-simple
     , scientific
     , servant
     , servant-client
@@ -180,6 +181,7 @@ executable vkpure-exe
     , http-client-tls
     , lens
     , named
+    , pretty-simple
     , scientific
     , servant
     , servant-client
@@ -255,6 +257,7 @@ test-suite vkpure-test
     , http-client-tls
     , lens
     , named
+    , pretty-simple
     , scientific
     , servant
     , servant-client
