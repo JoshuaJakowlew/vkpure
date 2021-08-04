@@ -7,6 +7,8 @@ import Control.Monad.Trans.Except ( runExceptT, throwE, ExceptT )
 import Control.Monad.IO.Class (liftIO)
 import Servant.Client ( ClientM )
 import Servant.Client.Generic ( AsClientT )
+import Text.Pretty.Simple (pPrint)
+
 
 import VkApi          qualified 
 import VkApi.Auth     qualified
@@ -30,14 +32,14 @@ either' v = v >>= \case
 
 main :: IO ()
 main = either' . runExceptT $ do
-  auth user >>= longPollServer >>= longPollLoop print
+  auth user >>= longPollServer >>= longPollLoop (liftIO . pPrint)
 
 -- // TODO: Use pts param => update types
-longPollLoop :: (VkApi.LongPoll.Success -> IO ()) -> Messages.LongPollServer -> ExceptT ErrorType IO ()
+longPollLoop :: (VkApi.LongPoll.Success -> ExceptT ErrorType IO ()) -> Messages.LongPollServer -> ExceptT ErrorType IO ()
 longPollLoop action server = do
   lpResponse <- longPollUpdates server
 
-  liftIO $ action lpResponse
+  action lpResponse
 
   let server' = server & #ts .~ (lpResponse ^. #ts)
   longPollLoop action server'

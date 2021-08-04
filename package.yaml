@@ -83,6 +83,7 @@ dependencies:
 - vector
 - ghc-prim
 - scientific
+- pretty-simple
 
 library:
   source-dirs: src
