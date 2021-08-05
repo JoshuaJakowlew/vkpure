@@ -1,0 +1,6 @@
+module VkApi.Objects.NotificationsNotificationItem where
+
+
+import VkApi.Objects.NotificationsNotification
+
+type NotificationsNotificationItem = NotificationsNotification
