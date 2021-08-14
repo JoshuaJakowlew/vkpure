@@ -10,6 +10,46 @@ extra-source-files:
 - README.md
 - ChangeLog.md
 
+default-extensions:
+- OverloadedLabels
+- AllowAmbiguousTypes
+- ApplicativeDo
+- BlockArguments
+- ConstraintKinds
+- DataKinds
+- DeriveGeneric
+- DeriveFoldable
+- DeriveFunctor
+- DeriveTraversable
+- DerivingStrategies
+- DeriveAnyClass
+- DerivingVia
+- DuplicateRecordFields
+- EmptyCase
+- FlexibleContexts
+- FlexibleInstances
+- FunctionalDependencies
+- GADTs
+- GeneralizedNewtypeDeriving
+- ImportQualifiedPost
+- KindSignatures
+- LambdaCase
+- MultiParamTypeClasses
+- MultiWayIf
+- NamedFieldPuns
+- OverloadedStrings
+- PatternSynonyms
+- RankNTypes
+- ScopedTypeVariables
+- StandaloneDeriving
+- TemplateHaskell
+- TypeApplications
+- TypeFamilies
+- TypeOperators
+- UndecidableInstances
+- ViewPatterns
+- QuasiQuotes
+
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
 # category:            Web
@@ -21,21 +61,8 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
-- aeson
-- aeson-pretty
-- array
-- bytestring
-- lens
-- pretty-show
-- servant
-- servant-client
-- servant-multipart
-- servant-multipart-client
-- servant-multipart-api
-- template-haskell
-- text
-- http-client
-- http-client-tls
+- containers
+- unliftio
 
 library:
   source-dirs: src
