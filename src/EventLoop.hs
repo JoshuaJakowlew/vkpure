@@ -1,16 +1,10 @@
 {-# LANGUAGE RecordWildCards #-}
 
 module EventLoop where
-
-import Control.Monad.IO.Class
-import Control.Monad
-import Control.Concurrent.MVar
-import Control.Concurrent (threadDelay, forkIO, ThreadId)
-import Control.Exception hiding (handle)
+  
+import Control.Concurrent
+import Control.Monad ( when, void )
 import UnliftIO.STM
-import UnliftIO.Async
-import System.IO
-import Control.Monad (join, forever)
 
 class EventDispatcher a where
   dispatch :: a -> IO ()
@@ -63,40 +57,3 @@ stopEventLoop :: MVar Bool -> IO ()
 stopEventLoop flag = do
   _ <- takeMVar flag
   putMVar flag False
-
--- Testing code
-
-doStuff :: IO ()
-doStuff = do
-  hSetBuffering stdout LineBuffering
-  EventLoop{..} <- runEventLoop
-  forever $ do
-    x <- getLine
-    atomically $ pushEvent queue x
-
-instance EventDispatcher String where
-  dispatch "ok"  = action  "ok"
-  dispatch _ = actionE "unknown"
-
-  dispatchWithState EventLoop{..} "stop" = actionStop flag "stop"
-  dispatchWithState _ x = dispatch x
-
-action :: String -> IO ()
-action e = do
-  putStrLn $ "Start action: " ++ e
-  threadDelay $ 3 * 10^6
-  print $ "Finish action: " ++ e
-
-actionE :: String -> IO ()
-actionE e = do
-  putStrLn $ "Start action: " ++ e
-  threadDelay $ 3 * 10^6
-  error "Ooops!"
-  print $ "Finish action: " ++ e
-
-actionStop :: MVar Bool -> String -> IO ()
-actionStop f e = do
-  putStrLn $ "Start action: " ++ e
-  threadDelay $ 3 * 10^6
-  stopEventLoop f
-  print $ "Finish action: " ++ e
