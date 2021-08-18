@@ -43,6 +43,5 @@ actionE e = do
 actionStop :: EventLoopFlag -> String -> IO ()
 actionStop f e = do
   putStrLn $ "Start action: " ++ e
-  threadDelay $ 3 * 10^6
   stopEventLoop f
   print $ "Finish action: " ++ e

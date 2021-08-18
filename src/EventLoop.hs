@@ -1,6 +1,17 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module EventLoop where
+module EventLoop
+  ( EventDispatcher(..)
+  , EventQueue
+  , EventLoopFlag
+  , EventLoop(..)
+  , pushEvent
+  , readEvent
+  , pushEventIO
+  , readEventIO
+  , runEventLoop
+  , stopEventLoop
+  ) where
   
 import Control.Concurrent
 import Control.Monad ( when, void )
@@ -20,19 +31,17 @@ data EventLoop a = EventLoop
   , flag  :: EventLoopFlag
   }
 
-newEventQueue :: EventDispatcher a => IO (EventQueue a)
-newEventQueue = newTQueueIO
-
 pushEvent :: EventDispatcher a => EventQueue a -> a -> STM ()
 pushEvent = writeTQueue
 
 readEvent :: EventDispatcher a => EventQueue a -> STM a
 readEvent = readTQueue
 
-processEvent :: EventDispatcher a => EventLoop a -> IO ()
-processEvent state@EventLoop{..} = do
-  e <- atomically $ readEvent queue
-  void $ forkIO $ dispatchWithState state e
+pushEventIO :: EventDispatcher a => EventQueue a -> a -> IO ()
+pushEventIO q e = atomically $ pushEvent q e
+
+readEventIO :: EventDispatcher a => EventQueue a -> IO a
+readEventIO q = atomically $ readEvent q
 
 runEventLoop :: EventDispatcher a => IO (EventLoop a)
 runEventLoop = do
@@ -40,11 +49,24 @@ runEventLoop = do
   forkIO $ eventLoop state
   pure state
 
+stopEventLoop :: EventLoopFlag -> IO ()
+stopEventLoop flag = do
+  _ <- takeMVar flag
+  putMVar flag False
+
+processEvent :: EventDispatcher a => EventLoop a -> IO ()
+processEvent state@EventLoop{..} = do
+  e <- atomically $ readEvent queue
+  void $ forkIO $ dispatchWithState state e
+
 newEventLoop :: EventDispatcher a => IO (EventLoop a)
 newEventLoop = do
   queue <- newEventQueue
   flag <- newMVar True
   pure EventLoop{..}
+
+newEventQueue :: EventDispatcher a => IO (EventQueue a)
+newEventQueue = newTQueueIO
 
 eventLoop :: EventDispatcher a => EventLoop a -> IO ()
 eventLoop state@EventLoop{..} = do
@@ -52,8 +74,3 @@ eventLoop state@EventLoop{..} = do
   when shouldRun $ do
     processEvent state
     eventLoop state
-
-stopEventLoop :: MVar Bool -> IO ()
-stopEventLoop flag = do
-  _ <- takeMVar flag
-  putMVar flag False
