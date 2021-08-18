@@ -18,7 +18,7 @@ doStuff = do
   EventLoop{..} <- runEventLoop
   forever $ do
     x <- getLine
-    atomically $ pushEvent queue x
+    pushEventIO queue x
 
 instance EventDispatcher String where
   dispatch "ok"  = action  "ok"
@@ -31,17 +31,17 @@ action :: String -> IO ()
 action e = do
   putStrLn $ "Start action: " ++ e
   threadDelay $ 3 * 10^6
-  print $ "Finish action: " ++ e
+  putStrLn $ "Finish action: " ++ e
 
 actionE :: String -> IO ()
 actionE e = do
   putStrLn $ "Start action: " ++ e
   threadDelay $ 3 * 10^6
   error "Ooops!"
-  print $ "Finish action: " ++ e
+  putStrLn $ "Finish action: " ++ e
 
 actionStop :: EventLoopFlag -> String -> IO ()
 actionStop f e = do
   putStrLn $ "Start action: " ++ e
   stopEventLoop f
-  print $ "Finish action: " ++ e
+  putStrLn $ "Finish action: " ++ e

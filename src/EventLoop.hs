@@ -56,7 +56,7 @@ stopEventLoop flag = do
 
 processEvent :: EventDispatcher a => EventLoop a -> IO ()
 processEvent state@EventLoop{..} = do
-  e <- atomically $ readEvent queue
+  e <- readEventIO queue
   void $ forkIO $ dispatchWithState state e
 
 newEventLoop :: EventDispatcher a => IO (EventLoop a)
